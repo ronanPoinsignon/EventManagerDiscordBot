@@ -1,0 +1,24 @@
+{
+  "name": "discord-bot-event-organizer",
+  "version": "1.0.0",
+  "description": "Gestionnaire d'événements via discord",
+  "license": "ISC",
+  "author": "Ronan",
+  "type": "module",
+  "main": "eslint.confg.cjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx src/index.ts",
+    "commands": "tsx src/deploy-command.ts"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.0",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
+  }
+}

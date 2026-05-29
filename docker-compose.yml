@@ -1,0 +1,16 @@
+services:
+  app:
+    container_name: pladonf_discord_bot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 4300:4300
+    networks:
+      - pladonf_api
+      - pladonf_auth
+networks:
+  pladonf_api:
+    driver: bridge
+  pladonf_auth:
+    driver: bridge
