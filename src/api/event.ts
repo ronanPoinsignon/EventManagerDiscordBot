@@ -9,10 +9,14 @@ export interface Event {
   startDate: Date;
   endDate?: Date;
   location?: string;
-  subEvents: Event[];
+  subEvents: SubEvent[];
   parentEvent?: Event;
   participants: User[];
   todoList: Todo[];
   tricountUrl?: string;
 
+}
+
+export type SubEvent = Event & {
+  parentEvent: Event;
 }

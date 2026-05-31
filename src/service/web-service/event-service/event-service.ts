@@ -1,5 +1,6 @@
 import { WebService } from '../web-service.js';
 import { Event } from '../../../api/event.js';
+import { Todo } from '../../../api/todo.js';
 
 class EventService extends WebService {
 
@@ -14,14 +15,24 @@ class EventService extends WebService {
     return this.get<Event[]>(route, userId);
   }
 
+  findAll(userId: string): Promise<Event[]> {
+    const route = this.getRoute("/findAll");
+    return this.get<Event[]>(route, userId);
+  }
+
   getLast(userId: string): Promise<Event> {
     const route = this.getRoute("/findActive");
     return this.get<Event>(route, userId);
   }
 
-  findByName(eventName: string, userId: string): Promise<Event> {
+  findById(eventId: string, userId: string): Promise<Event> {
+    const route = this.getRoute("/findById");
+    return this.get<Event>(route, userId, { "id": eventId });
+  }
+
+  findByName(eventName: string, parentName: string | null, userId: string): Promise<Event> {
     const route = this.getRoute("/findByEventName");
-    return this.get<Event>(route, userId, {"name": eventName});
+    return this.get<Event>(route, userId, {"name": eventName, parentName: parentName});
   }
 
   save(event: Event, userId: string): Promise<Event> {
@@ -29,60 +40,39 @@ class EventService extends WebService {
     return this.post(route, userId, {}, event);
   }
 
-  update(event: Event, userId: string): Promise<Event> {
-    const route = this.getRoute("/save");
-    return this.post(route, userId, {}, event);
+  update(event: Event, parentEventName: string | null, userId: string): Promise<Event> {
+    const route = this.getRoute("/discord/save");
+    return this.post(route, userId, { "parentEventName": parentEventName }, event);
   }
 
-  deleteEvent(eventName: string, parentName: string | null, userId: string): Promise<Event> {
+  deleteEvent(eventId: string, userId: string): Promise<Event> {
     const route = this.getRoute("/delete");
-    return this.delete(route, userId, {"eventName": eventName, "parentName": parentName});
+    return this.delete(route, userId, {"eventId": eventId});
   }
 
-  addEventParticipant(eventName: string, parentName: string | null, participantIds: string[], userId: string): Promise<Event> {
-      const route = this.getRoute("/participants/discord/add");
-      return this.post(route, userId, { "eventName": eventName, "parentName": parentName, "userIds": participantIds });
+  setEventParticipant(eventId: string, participantIds: string[], userId: string): Promise<Event> {
+    const route = this.getRoute("/participants/set");
+    return this.post(route, userId, { eventId: eventId, "userIds": participantIds })
   }
 
-  removeEventParticipant(eventName: string, parentName: string | null, participantIds: string[], userId: string): Promise<Event> {
-      const route = this.getRoute("/participants/discord/remove");
-      return this.post(route, userId, { "eventName": eventName, "parentName": parentName, "userIds": participantIds })
-  }
-
-  addTodo(eventName: string, parentName: string | null, todo: {name: string, todo: string}, userId: string): Promise<Event> {
+  addTodo(eventId: string, todo: {name: string, todo: string}, userIds: string[], isDone: boolean, userId: string): Promise<Event> {
     const route = this.getRoute("/todos/addTodo");
-    return this.post(route, userId, {"eventName": eventName, "parentName": parentName}, todo);
+    return this.post(route, userId, {"eventId": eventId, "userIds": userIds, "done": isDone}, todo);
   }
 
-  removeTodo(eventName: string, parentName: string | null, todoName: string, userId: string): Promise<Event> {
-    const route = this.getRoute("/todos/removeTodo");
-    return this.post(route, userId, {"eventName": eventName, "parentName": parentName, "todoName": todoName});
+  addTodoParticipant(eventId: string, todoName: string, participantIds: string[], userId: string): Promise<Event> {
+      const route = this.getRoute("/todos/addUsers");
+      return this.post(route, userId, {"eventId": eventId, "todoName": todoName, "userIds": participantIds});
   }
 
-  addTodoParticipant(eventName: string, parentName: string | null, todoName: string, participantId: string, userId: string): Promise<Event> {
-      const route = this.getRoute("/todos/discord/addUsers");
-      return this.post(route, userId, {"eventName": eventName, "parentName": parentName, "todoName": todoName, "userIds": participantId})
-  }
-
-  removeTodoParticipant(eventName: string, parentName: string | null, todoName: string, participantId: string, userId: string): Promise<Event> {
-      const route = this.getRoute("/todos/discord/removeUsers");
-      return this.post(route, userId, {"eventName": eventName, "parentName": parentName, "todoName": todoName, "userIds": participantId})
-  }
-
-  updateTodoStatus(eventName: string, parentName: string | null, todoName: string, isDone: boolean, userId: string): Promise<Event> {
-      const route = this.getRoute("/todos/updateStatus");
-      return this.post(route, userId, {"eventName": eventName, "parentName": parentName, "todoName": todoName, "isDone": isDone})
-  }
-
-
-  addSubEvent(eventName: string, parentName: string | null, subEvent: Event, userId: string): Promise<Event> {
+  addSubEvent(eventId: string, subEvent: Event, userId: string): Promise<Event> {
     const route = this.getRoute("/subEvent/addSubEvent")
-    return this.post(route, userId, { "eventName": eventName, "parentName": parentName }, subEvent);
+    return this.post(route, userId, { "parentEventId": eventId }, subEvent);
   }
 
-  removeSubEvent(eventName: string, parentName: string | null, subEventName: string, userId: string): Promise<Event> {
-    const route = this.getRoute("/subEvent/removeSubEvent")
-    return this.post(route, userId, {"eventName": eventName, "parentName": parentName, "subEventName": subEventName});
+  findByTodoId(todoId: string, userId: string): Promise<Event> {
+    const route = this.getRoute("/todos/findByTodoId");
+    return this.get<Event>(route, userId, { "todoId": todoId });
   }
 
 }

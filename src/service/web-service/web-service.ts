@@ -26,28 +26,33 @@ export class WebService {
   private async request<T, U>(url: string, userId: string, method: "GET" | "POST" | "PUT" | "DELETE", params?: Record<string, any>, body?: U): Promise<T> {
     let token = await keycloakService.getAccessToken();
 
-    let query = "";
     if(!params) {
        params = {};
     }
-    query = Object.entries(params)
+    const query = Object.entries(params)
       .filter(([key, value]) => value != null)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&');
 
-
     const response = await fetch(
-      WebService.baseURL + url + "?" + query, 
-      { 
+      WebService.baseURL + url + "?" + query,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
           "X-Discord-User-Id": userId
-        }, 
-        method, 
+        },
+        method,
         body: JSON.stringify(body)
       }
-    );
+    ).catch(err => {
+      if(err instanceof Error && err.message === "fetch failed") {
+        throw new InternalServerErrorException("Aucune réponse venant du serveur.");
+      }
+
+      console.error(err);
+      throw new InternalServerErrorException("Une erreur est survenue.");
+    });
 
     const bodyResponse = await response.json();
     dateHandler(bodyResponse);
@@ -61,7 +66,6 @@ export class WebService {
 
   private handleError(error: ErrorBody): WebException {
     const status = error.status;
-    console.error(error);
     switch(status) {
       case 400:
         return new BadRequestException(error.properties.error.message);

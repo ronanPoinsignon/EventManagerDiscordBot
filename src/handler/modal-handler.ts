@@ -16,6 +16,9 @@ class ModalHandler {
 
   static registerModal(modalId: string) {
     return function<T extends new () => ModalWorkflow>(clazz: T) {
+      if(modalHandler.modalHandlerList.has(modalId)) {
+        throw new Error(`Modal handler ${modalId} already exists`);
+      }
       modalHandler.modalHandlerList.set(modalId, new clazz());
     }
   }
@@ -48,24 +51,7 @@ class ModalHandler {
     try {
       await modal.run(interaction);
     } catch (error: any) {
-      let message = 'There was an error while executing this command!';
-      if(error instanceof WebException || error instanceof BotException) {
-        message = error.message;
-      } else {
-        console.error(error);
-      }
-
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: message,
-          flags: MessageFlags.Ephemeral,
-        });
-      } else {
-        await interaction.reply({
-          content: message,
-          flags: MessageFlags.Ephemeral,
-        });
-      }
+      await exceptionHandler.handle(interaction, error);
     }
   }
 

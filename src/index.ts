@@ -1,4 +1,4 @@
-import { Events, GatewayIntentBits } from 'discord.js';
+import { Collection, Events, GatewayIntentBits } from 'discord.js';
 import path from 'node:path';
 import * as fs from 'node:fs';
 
@@ -9,6 +9,7 @@ import { pathToFileURL } from 'node:url';
 import { configuration } from './configuration.js';
 import { modalHandler } from './handler/modal-handler.js';
 import { messageHandler } from './handler/message-handler.js';
+import { interactionHandler } from './handler/interaction-handler.js';
 
 const __dirname = path.dirname(__filename);
 
@@ -39,6 +40,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		}
 		if (interaction.isModalSubmit()) {
 			return await modalHandler.handle(interaction);
+		}
+		if(interaction.isAutocomplete()) {
+			return await interactionHandler.handle(interaction);
 		}
 	} catch(error) {
 		console.error(error);

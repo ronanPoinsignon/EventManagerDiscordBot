@@ -8,19 +8,19 @@ import { Event } from '../../api/event.js';
 import { dateService } from '../../service/date-service.js';
 import { printEvent } from '../../command/actions/get-event.js';
 
-@registerModal(MODALS.createEvent.id)
+@registerModal(MODALS.createSubEvent.id)
 export class CreateEventModalWorkflow extends ModalWorkflow {
 
   async run(interaction:  ModalSubmitInteraction): Promise<void> {
     const fields = interaction.fields;
 
-    const eventName = fields.getTextInputValue(MODALS.createEvent.eventNameId);
-    const startDate = fields.getTextInputValue(MODALS.createEvent.startDateId);
-    const endDate = fields.getTextInputValue(MODALS.createEvent.endDateId);
-    const adresse = fields.getTextInputValue(MODALS.createEvent.adresseId);
-    const tricount = fields.getTextInputValue(MODALS.createEvent.tricountId);
+    const eventId = fields.getStringSelectValues(MODALS.createSubEvent.eventNameId)[0];
+    const subEventName = fields.getTextInputValue(MODALS.createSubEvent.subEventNameId);
+    const startDate = fields.getTextInputValue(MODALS.createSubEvent.startDateId);
+    const endDate = fields.getTextInputValue(MODALS.createSubEvent.endDateId);
+    const adresse = fields.getTextInputValue(MODALS.createSubEvent.adresseId);
 
-    if(eventName == null) {
+    if(eventId == null) {
       throw new BotException('Le nom de l\'événement est obligatoire.');
     }
     if(startDate == null) {
@@ -29,7 +29,7 @@ export class CreateEventModalWorkflow extends ModalWorkflow {
 
     const event: Event = {
       id: undefined,
-      eventName: eventName,
+      eventName: subEventName,
       creationDate: undefined,
       startDate: dateService.toDate(startDate)!,
       endDate: dateService.toDate(endDate),
@@ -38,10 +38,10 @@ export class CreateEventModalWorkflow extends ModalWorkflow {
       parentEvent: undefined,
       participants: [],
       todoList: [],
-      tricountUrl: tricount
+      tricountUrl: ""
     }
 
-    const eventResult = await eventService.update(event, null, interaction.user.id);
+    const eventResult = await eventService.addSubEvent(eventId, event, interaction.user.id);
 
     await printEvent(interaction, eventResult)
   }

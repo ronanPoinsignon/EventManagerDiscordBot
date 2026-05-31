@@ -11,7 +11,7 @@ export class UserService extends WebService {
 
   getAllUsers(userId: string): Promise<User[]> {
     const route = this.getRoute("/")
-    return super.get(route, userId);
+    return super.get<User[]>(route, userId).then((users: User[]) => users.filter(user => user.discordId != null));
   }
 
 }
