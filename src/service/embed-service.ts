@@ -1,5 +1,5 @@
 import { resourceService } from './resource-service.js';
-import { Attachment, AttachmentBuilder } from 'discord.js';
+import { AttachmentBuilder } from 'discord.js';
 import { configuration } from '../configuration.js';
 
 class EmbedService {

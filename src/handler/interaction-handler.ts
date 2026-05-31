@@ -1,6 +1,4 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction } from 'discord.js';
-import { BotClient } from '../botClient.js';
-import { exceptionHandler } from './exception-handler.js';
+import { AutocompleteInteraction } from 'discord.js';
 import { eventService } from '../service/web-service/event-service/event-service.js';
 import { eventUtils } from '../service/event-utils.js';
 

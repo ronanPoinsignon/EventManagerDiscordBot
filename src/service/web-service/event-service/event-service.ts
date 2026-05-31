@@ -1,6 +1,5 @@
 import { WebService } from '../web-service.js';
 import { Event } from '../../../api/event.js';
-import { Todo } from '../../../api/todo.js';
 
 class EventService extends WebService {
 

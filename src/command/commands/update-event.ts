@@ -2,7 +2,6 @@ import { Command } from '../command.js';
 import { SlashCommandBuilder } from 'discord.js';
 import { UserException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service/event-service.js';
-import { showSubEventModal } from '../actions/show-sub-event-modal.js';
 import { showEventModal } from '../actions/show-event-modal.js';
 
 export default new Command(

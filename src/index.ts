@@ -1,9 +1,8 @@
-import { Collection, Events, GatewayIntentBits } from 'discord.js';
+import { Events, GatewayIntentBits } from 'discord.js';
 import path from 'node:path';
 import * as fs from 'node:fs';
 
 import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
 import { BotClient } from './botClient.js';
 import { pathToFileURL } from 'node:url';
 import { configuration } from './configuration.js';
@@ -11,6 +10,7 @@ import { modalHandler } from './handler/modal-handler.js';
 import { messageHandler } from './handler/message-handler.js';
 import { interactionHandler } from './handler/interaction-handler.js';
 
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const client = new BotClient({ intents: [GatewayIntentBits.Guilds] });
