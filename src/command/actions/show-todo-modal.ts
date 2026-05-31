@@ -12,6 +12,7 @@ import { eventUtils } from '../../service/event-utils.js';
 import { Todo } from '../../api/todo.js';
 import { userUtils } from '../../service/user-utils.js';
 import { UserException } from '../../exception/bot-exception.js';
+
 export const showTodoModal = async (userId: string, todoInfo: { eventName: string, todo: Todo, parentEventName: string | null } | null) => {
   const todo = todoInfo?.todo;
   const users = await userService.getAllUsers(userId);
