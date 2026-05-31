@@ -4,7 +4,7 @@ import { dateService } from './date-service.js';
 class EventUtils {
 
   getDateValue(event: Event) {
-    return event.endDate != null ? `Du ${dateService.toString(event.startDate)} au ${dateService.toString(event.endDate)}` : `Le ${dateService.toString(event.startDate)}`
+    return event.endDate != null ? `${dateService.toString(event.startDate)} - ${dateService.toString(event.endDate)}` : `${dateService.toString(event.startDate)}`
   }
 
   getAllEventFromEventBase(event: Event) {

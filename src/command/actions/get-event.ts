@@ -28,7 +28,7 @@ export const printEvent = async (interaction: ModalSubmitInteraction | ChatInput
     fields.push({ name: "Tricount", value: event.tricountUrl, inline: true });
   }
 
-  const participantValue = event.participants.length == 0 ? "Aucun participant pour le moment." : event.participants.map(participant => `${userUtils.parseUserName(participant)}`).join(",");
+  const participantValue = event.participants.length == 0 ? "Aucun participant pour le moment." : userUtils.getUserArrayString(event.participants);
   fields.push({ name: "Participants", value: participantValue });
 
   const todoValue = event.todoList.length == 0 ? "Rien à préparer pour le moment." : event.todoList.map(todo => `${todo.done ? "✅" : "❌"} ${todo.name} : ${todo.todoValue}`).join("\n");
@@ -51,8 +51,11 @@ const printSubEvents = (subEvents: SubEvent[]) => {
 }
 
 const printSubEvent = (subEvent: SubEvent) => {
-  let value = `${subEvent.eventName} - ${eventUtils.getDateValue(subEvent)}`;
-  value += "\n■ Participants :\n";
+  let value = `-> ${subEvent.eventName} | ${eventUtils.getDateValue(subEvent)}`;
+  if(subEvent.location) {
+    value += "\n" + subEvent.location;
+  }
+  value += "\n■ Participants : ";
   const participantIds = subEvent.participants.map(p => p.id);
   const parentEvent = subEvent.parentEvent;
   const hasAll = parentEvent.participants
@@ -62,10 +65,12 @@ const printSubEvent = (subEvent: SubEvent) => {
   if(hasAll) {
     value += "Tout le monde"
   } else {
-    const participantValue = subEvent.participants.length == 0 ? "Aucun participant pour le moment." : subEvent.participants.map(participant => `${userUtils.parseUserName(participant)}`).join(", ");
+    const participantValue = subEvent.participants.length == 0 ? "Aucun participant pour le moment." : userUtils.getUserArrayString(subEvent.participants);
     value += participantValue;
   }
-  value += "\n■ À faire :\n";
-  value += subEvent.todoList.length == 0 ? "Rien à préparer pour le moment." : subEvent.todoList.map(todo => `${todo.done ? "✅" : "❌"} ${todo.name} : ${todo.todoValue}`).join("\n");
+  if(subEvent.todoList.length != 0) {
+    value += "\n■ À faire :\n";
+    value += subEvent.todoList.map(todo => `${todo.done ? "✅" : "❌"} ${todo.name} : ${todo.todoValue}`).join("\n");
+  }
   return value;
 }
