@@ -6,7 +6,7 @@ import { BotException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service/event-service.js';
 
 @registerModal(MODALS.addEventParticipant.id)
-export class CreateEventModalWorkflow extends ModalWorkflow {
+export class SetEventParticipantsModalWorkflow extends ModalWorkflow {
 
   async run(interaction:  ModalSubmitInteraction): Promise<void> {
     const fields = interaction.fields;

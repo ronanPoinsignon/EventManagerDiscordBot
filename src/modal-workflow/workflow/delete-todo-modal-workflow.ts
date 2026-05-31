@@ -6,7 +6,7 @@ import { BotException } from '../../exception/bot-exception.js';
 import { todoService } from '../../service/web-service/todo-service/todo-service.js';
 
 @registerModal(MODALS.deleteTodo.id)
-export class CreateEventModalWorkflow extends ModalWorkflow {
+export class DeleteTodoModalWorkflow extends ModalWorkflow {
 
   async run(interaction:  ModalSubmitInteraction): Promise<void> {
     const fields = interaction.fields;

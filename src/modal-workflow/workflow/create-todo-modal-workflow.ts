@@ -7,7 +7,7 @@ import { eventService } from '../../service/web-service/event-service/event-serv
 import { printEvent } from '../../command/actions/get-event.js';
 
 @registerModal(MODALS.createTodo.id)
-export class CreateEventModalWorkflow extends ModalWorkflow {
+export class CreateTodoModalWorkflow extends ModalWorkflow {
 
   async run(interaction:  ModalSubmitInteraction): Promise<void> {
     const fields = interaction.fields;

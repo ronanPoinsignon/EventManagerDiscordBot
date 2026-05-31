@@ -9,7 +9,7 @@ import { dateService } from '../../service/date-service.js';
 import { printEvent } from '../../command/actions/get-event.js';
 
 @registerModal(MODALS.createSubEvent.id)
-export class CreateEventModalWorkflow extends ModalWorkflow {
+export class CreateSubEventModalWorkflow extends ModalWorkflow {
 
   async run(interaction:  ModalSubmitInteraction): Promise<void> {
     const fields = interaction.fields;
