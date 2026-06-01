@@ -5,10 +5,10 @@ import {
   StringSelectMenuOptionBuilder
 } from 'discord.js';
 import { MODALS } from '../../modal-workflow/modal-workflow-id.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
-import { eventUtils } from '../../service/event-utils.js';
-import { userService } from '../../service/web-service/user-service/user-service.js';
-import { userUtils } from '../../service/user-utils.js';
+import { eventService } from '../../service/web-service/event-service.js';
+import { eventUtils } from '../../utils/event-utils.js';
+import { userService } from '../../service/web-service/user-service.js';
+import { userUtils } from '../../utils/user-utils.js';
 
 export const showSetEventParticipant = async (userId: string) => {
   const events = await eventService.findActive(userId)

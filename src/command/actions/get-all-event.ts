@@ -1,19 +1,20 @@
-import { eventService } from '../../service/web-service/event-service/event-service.js';
-import { dateService } from '../../service/date-service.js';
-import { embedService } from '../../service/embed-service.js';
+import { eventService } from '../../service/web-service/event-service.js';
+import { dateUtils } from '../../utils/date-utils.js';
+import { embedUtils } from '../../utils/embed-utils.js';
 import { ChatInputCommandInteraction } from 'discord.js';
+import { replyService } from '../../utils/reply-service.js';
 
 export const getAll = async (interaction: ChatInputCommandInteraction) => {
   const events = await eventService.findActive(interaction.user.id);
   const fields = events.map(event => {
     return {
       name: event.eventName,
-      value: event.endDate != null ? `Du ${dateService.toString(event.startDate)} au ${dateService.toString(event.endDate)}` : `Le ${dateService.toString(event.startDate)}`,
+      value: event.endDate == null ? dateUtils.toString(event.startDate) : dateUtils.toStringRange({ startDate: event.startDate, endDate: event.endDate }),
     }
   });
 
   const description = fields.length == 0 ? "Aucun événement futur." : undefined;
-  const embed = embedService.createEmbed("Prochains événements", fields, description);
+  const embed = embedUtils.createEmbed("Prochains événements", fields, description);
 
-  await interaction.reply({ embeds: [embed.embed], files: embed.attachments });
+  await replyService.reply(interaction, { embeds: [embed.embed], files: embed.attachments });
 }

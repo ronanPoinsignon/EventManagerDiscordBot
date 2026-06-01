@@ -3,7 +3,8 @@ import { ModalWorkflow } from '../modal-workflow.js';
 import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
+import { eventService } from '../../service/web-service/event-service.js';
+import { replyService } from '../../utils/reply-service.js';
 
 @registerModal(MODALS.addEventParticipant.id)
 export class SetEventParticipantsModalWorkflow extends ModalWorkflow {
@@ -20,6 +21,6 @@ export class SetEventParticipantsModalWorkflow extends ModalWorkflow {
 
     const todoResult = await eventService.setEventParticipant(eventId, [...participants], interaction.user.id);
 
-    await interaction.reply({ content: `Les participants ont bien été modifiés.`})
+    await replyService.reply(interaction, { content: `Les participants ont bien été modifiés.`})
   }
 }

@@ -1,5 +1,5 @@
-import { WebService } from '../web-service.js';
-import { Event } from '../../../api/event.js';
+import { WebService } from './web-service.js';
+import { Event } from '../../api/event.js';
 
 class EventService extends WebService {
 
@@ -72,6 +72,16 @@ class EventService extends WebService {
   findByTodoId(todoId: string, userId: string): Promise<Event> {
     const route = this.getRoute("/todos/findByTodoId");
     return this.get<Event>(route, userId, { "todoId": todoId });
+  }
+
+  uploadEventFile(eventId: string, body: FormData, userId: string): Promise<Blob> {
+    const route = this.getRoute("/uploadEventFile");
+    return this.uploadFile(route, userId, { "eventId": eventId }, body)
+  }
+
+  getEvenFile(eventId: string, userId: string): Promise<Blob> {
+    const route = this.getRoute("/downloadImage");
+    return this.getFile(route, userId, { "eventId": eventId });
   }
 
 }

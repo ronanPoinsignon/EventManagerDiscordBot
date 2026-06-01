@@ -1,5 +1,5 @@
-import { WebService } from '../web-service.js';
-import { User } from '../../../api/user.js';
+import { WebService } from './web-service.js';
+import { User } from '../../api/user.js';
 
 export class UserService extends WebService {
    

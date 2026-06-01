@@ -1,10 +1,10 @@
 import { Event } from '../api/event.js';
-import { dateService } from './date-service.js';
+import { dateUtils } from './date-utils.js';
 
 class EventUtils {
 
   getDateValue(event: Event) {
-    return event.endDate != null ? `${dateService.toString(event.startDate)} - ${dateService.toString(event.endDate)}` : `${dateService.toString(event.startDate)}`
+    return event.endDate == null ? dateUtils.toString(event.startDate) : dateUtils.toStringRange({ startDate: event.startDate, endDate: event.endDate });
   }
 
   getAllEventFromEventBase(event: Event) {

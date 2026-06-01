@@ -1,4 +1,4 @@
-import { WebException } from '../service/web-service/web-exception/web-exception.js';
+import { WebException } from '../service/web-service/web-exception.js';
 import {
   ChatInputCommandInteraction,
   MessageContextMenuCommandInteraction,

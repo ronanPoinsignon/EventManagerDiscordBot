@@ -3,8 +3,8 @@ import { ModalWorkflow } from '../modal-workflow.js';
 import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
-import { printEvent } from '../../command/actions/get-event.js';
+import { eventService } from '../../service/web-service/event-service.js';
+import { replyService } from '../../utils/reply-service.js';
 
 @registerModal(MODALS.deleteEvent.id)
 export class DeleteEventModalWorkflow extends ModalWorkflow {
@@ -18,8 +18,8 @@ export class DeleteEventModalWorkflow extends ModalWorkflow {
       throw new BotException('Le nom de l\'événement est obligatoire.');
     }
 
-    const todoResult = await eventService.deleteEvent(eventId, interaction.user.id);
+    const deletedEvent = await eventService.deleteEvent(eventId, interaction.user.id);
 
-    await printEvent(interaction, todoResult)
+    await replyService.reply(interaction, { content: `L'événement ${deletedEvent.eventName} a bien été supprimé.`});
   }
 }

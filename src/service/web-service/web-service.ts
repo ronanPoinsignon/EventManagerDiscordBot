@@ -4,7 +4,7 @@ import {
   ForbiddenException,
   InternalServerErrorException,
   NotFoundException, UnauthorizedException, WebException
-} from './web-exception/web-exception.js';
+} from './web-exception.js';
 import { configuration } from '../../configuration.js';
 
 export class WebService {
@@ -24,26 +24,46 @@ export class WebService {
   }
 
   private async request<T, U>(url: string, userId: string, method: "GET" | "POST" | "PUT" | "DELETE", params?: Record<string, any>, body?: U): Promise<T> {
+    return this.makeRequest<T>(userId, this.asJsonResponse, url, method, params, JSON.stringify(body), { "Content-Type": "application/json" });
+  }
+
+  async uploadFile(url: string, userId: string, params: Record<string, any>, body: FormData): Promise<Blob> {
+    return await this.makeRequest(userId, this.asBlob, url, "POST", params, body);
+  }
+
+  async getFile(url: string, userId: string, params?: Record<string, any>): Promise<Blob> {
+    return await this.makeRequest(userId, this.asBlob, url, "GET", params);
+  }
+
+  private async makeRequest<T>(userId: string,
+                               handleResponse: (response: Response) => Promise<T>,
+                               url: string,
+                               method: "GET" | "POST" | "PUT" | "DELETE",
+                               params: Record<string, any> = {},
+                               body?: FormData | string,
+                               specificHeaders : Record<string, any> = {}) {
     let token = await keycloakService.getAccessToken();
 
     if(!params) {
-       params = {};
+      params = {};
     }
     const query = Object.entries(params)
       .filter(([key, value]) => value != null)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&');
 
+    const headers: { [key: string]: string } = {
+      ...specificHeaders,
+      Authorization: `Bearer ${token}`,
+      "X-Discord-User-Id": userId
+    }
+
     const response = await fetch(
       WebService.baseURL + url + "?" + query,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          "X-Discord-User-Id": userId
-        },
-        method,
-        body: JSON.stringify(body)
+        headers: headers,
+        method: method,
+        body: body
       }
     ).catch(err => {
       if(err instanceof Error && err.message === "fetch failed") {
@@ -54,14 +74,22 @@ export class WebService {
       throw new InternalServerErrorException("Une erreur est survenue.");
     });
 
+    if(!response.ok) {
+      throw this.handleError(await response.json() as ErrorBody);
+    }
+
+    return await handleResponse(response);
+  }
+
+  private async asJsonResponse<T>(response: Response): Promise<T> {
     const bodyResponse = await response.json();
     dateHandler(bodyResponse);
 
-    if(!response.ok) {
-      throw this.handleError(bodyResponse as ErrorBody);
-    }
-
     return bodyResponse as T;
+  }
+
+  private async asBlob(response: Response): Promise<Blob> {
+    return await response.blob();
   }
 
   private handleError(error: ErrorBody): WebException {

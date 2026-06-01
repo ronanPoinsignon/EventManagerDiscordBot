@@ -6,11 +6,11 @@ import {
   TextInputStyle
 } from 'discord.js';
 import { MODALS } from '../../modal-workflow/modal-workflow-id.js';
-import { userService } from '../../service/web-service/user-service/user-service.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
-import { eventUtils } from '../../service/event-utils.js';
+import { userService } from '../../service/web-service/user-service.js';
+import { eventService } from '../../service/web-service/event-service.js';
+import { eventUtils } from '../../utils/event-utils.js';
 import { Todo } from '../../api/todo.js';
-import { userUtils } from '../../service/user-utils.js';
+import { userUtils } from '../../utils/user-utils.js';
 import { UserException } from '../../exception/bot-exception.js';
 
 export const showTodoModal = async (userId: string, todoInfo: { eventName: string, todo: Todo, parentEventName: string | null } | null) => {

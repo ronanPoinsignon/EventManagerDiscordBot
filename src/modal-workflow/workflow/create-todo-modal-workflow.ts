@@ -3,7 +3,7 @@ import { ModalWorkflow } from '../modal-workflow.js';
 import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
+import { eventService } from '../../service/web-service/event-service.js';
 import { printEvent } from '../../command/actions/get-event.js';
 
 @registerModal(MODALS.createTodo.id)

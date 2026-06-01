@@ -3,8 +3,8 @@ import {
   StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle
 } from 'discord.js';
 import { MODALS } from '../../modal-workflow/modal-workflow-id.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
-import { dateService } from '../../service/date-service.js';
+import { eventService } from '../../service/web-service/event-service.js';
+import { dateUtils } from '../../utils/date-utils.js';
 import { SubEvent } from '../../api/event.js';
 
 export const showSubEventModal = async (userId: string, event: SubEvent | null) => {
@@ -42,9 +42,9 @@ export const showSubEventModal = async (userId: string, event: SubEvent | null) 
   const startDateInput = new TextInputBuilder()
     .setCustomId(MODALS.createSubEvent.startDateId)
     .setStyle(TextInputStyle.Short)
-    .setPlaceholder("DD/MM/YYYY HH:MM")
+    .setPlaceholder(dateUtils.getDatePlaceholder())
     .setRequired(true);
-  const startDate = dateService.toString(event?.startDate);
+  const startDate = dateUtils.toString(event?.startDate);
   if(startDate) {
     startDateInput.setValue(startDate);
   }
@@ -55,9 +55,9 @@ export const showSubEventModal = async (userId: string, event: SubEvent | null) 
   const endDateInput = new TextInputBuilder()
     .setCustomId(MODALS.createSubEvent.endDateId)
     .setStyle(TextInputStyle.Short)
-    .setPlaceholder("DD/MM/YYYY HH:MM")
+    .setPlaceholder(dateUtils.getDatePlaceholder())
     .setRequired(false);
-  const endDate = dateService.toString(event?.endDate);
+  const endDate = dateUtils.toString(event?.endDate);
   if(endDate) {
     endDateInput.setValue(endDate);
   }

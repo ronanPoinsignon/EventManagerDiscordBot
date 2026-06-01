@@ -3,9 +3,9 @@ import { ModalWorkflow } from '../modal-workflow.js';
 import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
-import { eventService } from '../../service/web-service/event-service/event-service.js';
+import { eventService } from '../../service/web-service/event-service.js';
 import { Event } from '../../api/event.js';
-import { dateService } from '../../service/date-service.js';
+import { dateUtils } from '../../utils/date-utils.js';
 import { printEvent } from '../../command/actions/get-event.js';
 
 @registerModal(MODALS.createSubEvent.id + "-update")
@@ -33,8 +33,8 @@ export class UpdateSubEventModalWorkflow extends ModalWorkflow {
       id: Number(eventId),
       eventName: subEventName,
       creationDate: undefined,
-      startDate: dateService.toDate(startDate)!,
-      endDate: dateService.toDate(endDate),
+      startDate: dateUtils.toDate(startDate)!,
+      endDate: dateUtils.toDate(endDate),
       location: adresse,
       subEvents: [],
       parentEvent: undefined,

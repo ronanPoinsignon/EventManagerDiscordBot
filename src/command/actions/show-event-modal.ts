@@ -1,7 +1,7 @@
 import { Event } from '../../api/event.js';
 import { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { MODALS } from '../../modal-workflow/modal-workflow-id.js';
-import { dateService } from '../../service/date-service.js';
+import { dateUtils } from '../../utils/date-utils.js';
 
 export const showEventModal = async (event: Event | null) => {
   const modal = new ModalBuilder().setCustomId(MODALS.createEvent.id).setTitle('Nouvel événement');
@@ -21,9 +21,9 @@ export const showEventModal = async (event: Event | null) => {
   const startDateInput = new TextInputBuilder()
     .setCustomId(MODALS.createEvent.startDateId)
     .setStyle(TextInputStyle.Short)
-    .setPlaceholder("DD/MM/YYYY HH:MM")
+    .setPlaceholder(dateUtils.getDatePlaceholder())
     .setRequired(true);
-  const startDate = dateService.toString(event?.startDate);
+  const startDate = dateUtils.toString(event?.startDate);
   if(startDate) {
     startDateInput.setValue(startDate)
   }
@@ -34,9 +34,9 @@ export const showEventModal = async (event: Event | null) => {
   const endDateInput = new TextInputBuilder()
     .setCustomId(MODALS.createEvent.endDateId)
     .setStyle(TextInputStyle.Short)
-    .setPlaceholder("DD/MM/YYYY HH:MM")
+    .setPlaceholder(dateUtils.getDatePlaceholder())
     .setRequired(false);
-  const endDate = dateService.toString(event?.endDate);
+  const endDate = dateUtils.toString(event?.endDate);
   if(endDate) {
     endDateInput.setValue(endDate);
   }

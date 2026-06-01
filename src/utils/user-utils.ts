@@ -2,6 +2,8 @@ import { User } from '../api/user.js';
 
 class UserUtils {
 
+  private intlLinkUser = new Intl.ListFormat("fr", {style: "long", type: "conjunction"});
+
   parseUserName(user: User) {
     return this.capitalizeFirstLetter(user.username);
   }
@@ -11,7 +13,7 @@ class UserUtils {
   }
 
   getUserArrayString(users: User[]) {
-    return users.map(user => this.parseUserName(user)).sort((str1, str2) => str1.localeCompare(str2)).join(', ');
+    return this.intlLinkUser.format(users.map(user => this.parseUserName(user)));
   }
 
 }

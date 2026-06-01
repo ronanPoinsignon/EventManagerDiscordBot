@@ -1,20 +1,18 @@
-import { resourceService } from './resource-service.js';
+import { resourceService } from '../service/resource-service.js';
 import { AttachmentBuilder } from 'discord.js';
 import { configuration } from '../configuration.js';
 
-class EmbedService {
+class EmbedUtils {
 
-  private logoPath = resourceService.getImage("logo");
   private logoName = "logo.png";
-  private logo = new AttachmentBuilder(this.logoPath, {
-    name: 'logo.png',
-  });
+  private logoPath = resourceService.getImage(this.logoName);
+  private logo = new AttachmentBuilder(this.logoPath!, { name: this.logoName });
 
   getLogoAttachment() {
     return this.logo;
   }
 
-  createEmbed(title: string, fields: {name: string, value: string, inline?: boolean}[], description?: string, urlPage?: string) {
+  createEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
     const embed = {
       color: 0x0099ff,
       title: title,
@@ -42,4 +40,4 @@ class EmbedService {
 
 }
 
-export const embedService = new EmbedService();
+export const embedUtils = new EmbedUtils();
