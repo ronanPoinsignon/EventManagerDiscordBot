@@ -1,13 +1,10 @@
-import path from 'node:path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { localFileService } from './local-file-service.js';
 
 class ResourceService {
 
+
   getImage(name: string) {
-    return path.join(__dirname, "../../resources/images/" + name + ".png");
+    return localFileService.getFile("images", name);
   }
 
 }

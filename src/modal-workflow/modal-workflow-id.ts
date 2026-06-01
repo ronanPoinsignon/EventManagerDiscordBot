@@ -49,5 +49,10 @@ export const MODALS = {
   selectEventUpdate: {
     id: "selectEventUpdateModalId",
     eventId: "eventId"
+  },
+  uploadEventImage: {
+    id: "uploadEventImageModalId",
+    eventId: "eventId",
+    image: "imageId"
   }
 }
