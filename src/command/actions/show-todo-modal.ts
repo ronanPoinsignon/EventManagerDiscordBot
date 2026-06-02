@@ -65,7 +65,6 @@ export const showTodoModal = async (userId: string, todoInfo: { eventName: strin
     return new StringSelectMenuOptionBuilder()
       .setLabel(userUtils.parseUserName(user))
       .setValue(user.id)
-      .setDefault((todo?.participants?.map(user => user.discordId + "") || [ userId ]).indexOf(user.discordId + "") >= 0)
   });
   const participantInput = new StringSelectMenuBuilder()
     .setCustomId(MODALS.createTodo.participants)
