@@ -85,11 +85,13 @@ export const showTodoModal = async (userId: string, todoInfo: { eventName: strin
       new StringSelectMenuOptionBuilder()
         .setLabel("Fait")
         .setValue("true")
-        .setDefault(todo?.done === true),
+        .setDefault(todo?.done === true)
+        .setEmoji('✅'),
       new StringSelectMenuOptionBuilder()
         .setLabel("À faire")
         .setValue("false")
         .setDefault(todo?.done === false)
+        .setEmoji('❌')
     ]);
   const doneNameLabel = new LabelBuilder()
     .setLabel("À faire ?")
