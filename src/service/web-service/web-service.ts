@@ -6,6 +6,8 @@ import {
   NotFoundException, UnauthorizedException, WebException
 } from './web-exception.js';
 import { configuration } from '../../configuration.js';
+import { dateUtils } from '../../utils/date-utils.js';
+import { isDate } from 'node:util/types';
 
 export class WebService {
 
@@ -24,7 +26,7 @@ export class WebService {
   }
 
   private async request<T, U>(url: string, userId: string, method: "GET" | "POST" | "PUT" | "DELETE", params?: Record<string, any>, body?: U): Promise<T> {
-    return this.makeRequest<T>(userId, this.asJsonResponse, url, method, params, JSON.stringify(body), { "Content-Type": "application/json" });
+    return this.makeRequest<T>(userId, this.asJsonResponse, url, method, params, stringifyBody(body), { "Content-Type": "application/json" });
   }
 
   async uploadFile(url: string, userId: string, params: Record<string, any>, body: FormData): Promise<Blob> {
@@ -83,7 +85,7 @@ export class WebService {
 
   private async asJsonResponse<T>(response: Response): Promise<T> {
     const bodyResponse = await response.json();
-    dateHandler(bodyResponse);
+    stringToDate(bodyResponse);
 
     return bodyResponse as T;
   }
@@ -117,19 +119,45 @@ function isIsoDate(value: string): boolean {
   return ISO_DATE_REGEX.test(value);
 }
 
-function dateHandler(obj: any){
+function stringToDate(obj: any){
   if (!obj || typeof obj !== 'object') return obj;
 
   for (const key of Object.keys(obj)) {
     const value = obj[key];
 
     if(typeof value === 'object') {
-      dateHandler(value);
+      stringToDate(value);
     }
     else if (typeof value === 'string' && isIsoDate(value)) {
-      obj[key] = new Date(value);
+      obj[key] = dateUtils.parseInstant(value);
     }
   }
+}
+
+function dateToString(obj: any){
+  if (!obj || typeof obj !== 'object') return obj;
+
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
+
+    if(isDate(value)) {
+      obj[key] = dateUtils.toIsoString(value);
+    }
+    else if (typeof value === 'object') {
+      dateToString(value);
+    }
+  }
+}
+
+function parseBody<T>(body: T) {
+  const newBody = structuredClone(body);
+  dateToString(newBody);
+
+  return newBody;
+}
+
+function stringifyBody<T>(body: T) {
+  return JSON.stringify(parseBody(body));
 }
 
 interface ErrorBody {

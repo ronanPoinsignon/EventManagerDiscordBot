@@ -2,6 +2,14 @@ import { UserException } from '../exception/bot-exception.js';
 
 class DateUtils {
 
+  createDate(year: number, month: number, day: number, hour: number, minute: number, second: number = 0) {
+    return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  }
+
+  now() {
+    return new Date();
+  }
+
   toString(date: Date): string;
   toString(date: null | undefined): null;
   toString(date: Date | null | undefined): string | null;
@@ -33,17 +41,17 @@ class DateUtils {
   }
 
   isSameDay(date1: Date, date2: Date): boolean {
-    return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+    return date1.getUTCFullYear() === date2.getUTCFullYear() && date1.getUTCMonth() === date2.getUTCMonth() && date1.getUTCDate() === date2.getUTCDate();
   }
 
   extractDate(date: Date) {
     const padStart = (value: number): string => value.toString().padStart(2, '0');
-    return `${date.getDate()}/${padStart(date.getMonth() + 1)}/${padStart(date.getFullYear())}`;
+    return `${padStart(date.getUTCDate())}/${padStart(date.getUTCMonth() + 1)}/${padStart(date.getUTCFullYear())}`;
   }
 
   extractTime(date: Date) {
     const padStart = (value: number): string => value.toString().padStart(2, '0');
-    return `${padStart(date.getHours())}:${padStart(date.getMinutes())}`;
+    return `${padStart(date.getUTCHours())}:${padStart(date.getUTCMinutes())}`;
   }
 
   private dateCustomFormatting(date: Date): string {
@@ -67,7 +75,15 @@ class DateUtils {
       throw new UserException(`Heure invalide : ${h}:${min}`);
     }
 
-    return new Date(Date.UTC(y, m - 1, d, h, min));
+    return this.createDate(y, m, d, h, min);
+  }
+
+  public parseInstant(input: string): Date {
+    return new Date(input);
+  }
+
+  public toIsoString(date: Date) {
+    return date.toISOString();
   }
 
 }

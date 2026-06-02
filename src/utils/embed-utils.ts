@@ -1,6 +1,7 @@
 import { resourceService } from '../service/resource-service.js';
 import { AttachmentBuilder } from 'discord.js';
 import { configuration } from '../configuration.js';
+import { dateUtils } from './date-utils.js';
 
 class EmbedUtils {
 
@@ -27,7 +28,7 @@ class EmbedUtils {
         url: 'attachment://' + this.logoName,
       },
       fields: fields,
-      timestamp: new Date().toISOString()
+      timestamp: dateUtils.now().toISOString()
     };
 
     const attachments = [ this.getLogoAttachment() ];
