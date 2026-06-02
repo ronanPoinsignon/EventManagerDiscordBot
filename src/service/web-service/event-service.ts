@@ -1,5 +1,6 @@
 import { WebService } from './web-service.js';
 import { Event } from '../../api/event.js';
+import { NotFoundException } from './web-exception.js';
 
 class EventService extends WebService {
 
@@ -79,9 +80,17 @@ class EventService extends WebService {
     return this.uploadFile(route, userId, { "eventId": eventId }, body)
   }
 
-  getEvenFile(eventId: string, userId: string): Promise<Blob> {
+  async getEvenFile(eventId: string, userId: string): Promise<Blob | null> {
     const route = this.getRoute("/downloadImage");
-    return this.getFile(route, userId, { "eventId": eventId });
+    try {
+      return await this.getFile(route, userId, { 'eventId': eventId });
+    } catch (e) {
+      if(e instanceof NotFoundException) {
+        return null;
+      }
+
+      throw e;
+    }
   }
 
 }
