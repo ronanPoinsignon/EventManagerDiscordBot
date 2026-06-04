@@ -1,4 +1,5 @@
 import { configuration } from '../configuration.js';
+import { InternalServerErrorException } from './web-service/web-exception.js';
 
 type TokenResponse = {
   access_token: string;
@@ -33,7 +34,14 @@ export class KeycloakService {
         },
         body: params
       }
-    );
+    ).catch(err => {
+      console.error(err);
+      if(err instanceof Error && err.message === "fetch failed") {
+        throw new InternalServerErrorException("Aucune réponse venant du serveur.");
+      }
+
+      throw new InternalServerErrorException("Une erreur est survenue.");
+    });
 
     if (!response.ok) {
       throw new Error(`Keycloak auth failed: ${response.status}`);

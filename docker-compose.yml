@@ -17,6 +17,6 @@ services:
       - pladonf_auth
 networks:
   pladonf_api:
-    driver: bridge
+    external: true
   pladonf_auth:
-    driver: bridge
+    external: true
