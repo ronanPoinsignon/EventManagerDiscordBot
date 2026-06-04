@@ -1,6 +1,12 @@
 services:
   app:
     container_name: pladonf_discord_bot
+    environment:
+      - TOKEN=$TOKEN
+      - KEYCLOAK_REALM=$KEYCLOAK_REALM
+      - KEYCLOAK_CLIENT_NAME=$KEYCLOAK_CLIENT_NAME
+      - KEYCLOAK_CLIENT_SECRET=$KEYCLOAK_CLIENT_SECRET
+
     build:
       context: .
       dockerfile: Dockerfile
