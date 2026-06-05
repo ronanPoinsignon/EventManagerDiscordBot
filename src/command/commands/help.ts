@@ -17,7 +17,7 @@ export class HelpCommand extends Command {
 }
 
 export const command = new HelpCommand(
-  new SlashCommandBuilder().setName('help').setDescription('Voir la liste des commandes et de leur descriptions'),
+  new SlashCommandBuilder().setName('help').setDescription('Voir la liste des commandes et de leur description'),
   async (interaction: ChatInputCommandInteraction) => {
     const command = interaction.options.getString("commande");
 
