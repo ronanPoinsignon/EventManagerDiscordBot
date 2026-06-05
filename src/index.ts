@@ -29,7 +29,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			try {
 				return await interactionHandler.handle(interaction);
 			} catch (e) {
-				console.error(e);
+				console.error("erreur autocomplete : ", e);
 			}
 		}
 	} catch(error) {

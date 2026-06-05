@@ -37,7 +37,7 @@ export class KeycloakService {
     ).catch(err => {
       console.error(err);
       if(err instanceof Error && err.message === "fetch failed") {
-        throw new InternalServerErrorException("Aucune réponse venant du serveur.");
+        throw new InternalServerErrorException("Aucune réponse venant du gestionnaire d'utilisateurs.");
       }
 
       throw new InternalServerErrorException("Une erreur est survenue.");

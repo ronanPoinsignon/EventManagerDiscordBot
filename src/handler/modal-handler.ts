@@ -47,7 +47,7 @@ class ModalHandler {
     }
 
     try {
-      await interaction.deferReply()
+      await interaction.deferReply();
       await modal.run(interaction);
     } catch (error: any) {
       await exceptionHandler.handle(interaction, error);
