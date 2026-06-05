@@ -5,7 +5,7 @@ import { eventService } from '../../service/web-service/event-service.js';
 import { showSubEventModal } from '../actions/show-sub-event-modal.js';
 import { SubEvent } from '../../api/event.js';
 
-export default new Command(
+export const command = new Command(
   new SlashCommandBuilder().setName('update-programme').setDescription('Modifier un programme')
     .addStringOption(option => option.setName("program-name").setDescription("Le nom du programme").setAutocomplete(true).setRequired(true)),
   async (interaction) => {

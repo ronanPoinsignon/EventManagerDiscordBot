@@ -5,7 +5,7 @@ import {
   AttachmentBuilder,
   ChatInputCommandInteraction,
   ContainerBuilder,
-  MessageContextMenuCommandInteraction, MessageFlags, MessagePayload,
+  MessageContextMenuCommandInteraction, MessageFlags,
   ModalSubmitInteraction, PrimaryEntryPointCommandInteraction, SectionBuilder,
   SeparatorBuilder, TextDisplayBuilder, ThumbnailBuilder, UserContextMenuCommandInteraction
 } from 'discord.js';
@@ -15,7 +15,6 @@ import { localFileService } from '../../service/local-file-service.js';
 import { replyService } from '../../utils/reply-service.js';
 import { dateUtils } from '../../utils/date-utils.js';
 import { resourceService } from '../../service/resource-service.js';
-import { configuration } from '../../configuration.js';
 
 export const findAndPrintEvent = async (interaction: ModalSubmitInteraction | ChatInputCommandInteraction | MessageContextMenuCommandInteraction | UserContextMenuCommandInteraction | PrimaryEntryPointCommandInteraction, eventId: string) => {
   if(eventId == null) {

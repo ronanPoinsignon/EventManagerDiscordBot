@@ -4,7 +4,7 @@ import { UserException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
 import { showEventModal } from '../actions/show-event-modal.js';
 
-export default new Command(
+export const command = new Command(
   new SlashCommandBuilder().setName('update-event').setDescription('Modifier un événement')
     .addStringOption(option => option.setName("event-name").setDescription("Le nom de l'événement").setAutocomplete(true).setRequired(true)),
   async (interaction) => {

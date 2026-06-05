@@ -4,7 +4,7 @@ import { showTodoModal } from '../actions/show-todo-modal.js';
 import { UserException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
 
-export default new Command(
+export const command = new Command(
   new SlashCommandBuilder().setName('update-todo').setDescription('Modifier un todo existant')
     .addStringOption(option => option.setName("todo-name").setDescription("Le nom du todo").setAutocomplete(true).setRequired(true)),
   async (interaction) => {
