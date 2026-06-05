@@ -14,7 +14,7 @@ export const showCommand = async (interaction: ChatInputCommandInteraction, comm
       value: optionInfo.description
     };
   }) || [];
-  const embed = embedUtils.createEmbed("Liste des commandes disponibles", fields);
+  const embed = embedUtils.informationEmbed("Commande " + commandName, fields, command?.data.description);
 
   await replyService.reply(interaction, { embeds: [embed.embed], files: embed.attachments });
 }

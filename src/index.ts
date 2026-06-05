@@ -1,10 +1,12 @@
-import { Events, GatewayIntentBits } from 'discord.js';
+import { ChatInputCommandInteraction, Events, GatewayIntentBits, ModalSubmitInteraction } from 'discord.js';
 import { BotClient } from './botClient.js';
 import { configuration } from './configuration.js';
 import { modalHandler } from './handler/modal-handler.js';
 import { messageHandler } from './handler/message-handler.js';
 import { interactionHandler } from './handler/interaction-handler.js';
 import { commandUtils } from './utils/command-utils.js';
+import { replyService } from './utils/reply-service.js';
+import { embedUtils } from './utils/embed-utils.js';
 
 const client = new BotClient({ intents: [GatewayIntentBits.Guilds] });
 
@@ -24,10 +26,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			return await modalHandler.handle(interaction);
 		}
 		if(interaction.isAutocomplete()) {
-			return await interactionHandler.handle(interaction);
+			try {
+				return await interactionHandler.handle(interaction);
+			} catch (e) {
+				console.error(e);
+			}
 		}
 	} catch(error) {
-		console.error(error);
+		if(!(error instanceof Error)) {
+			const embed = embedUtils.errorEmbed("Erreur inconnue", [], "Une erreur inconnue est survenue.");
+			await replyService.replyEmbed(interaction as ChatInputCommandInteraction |  ModalSubmitInteraction, { embed: [ embed.embed], attachment: embed.attachments });
+			return;
+		}
+
+		const embed = embedUtils.errorEmbed("Erreur", [], error.message);
+		await replyService.replyEmbed(interaction as ChatInputCommandInteraction |  ModalSubmitInteraction, { embed: [ embed.embed], attachment: embed.attachments });
 	}
 });
 

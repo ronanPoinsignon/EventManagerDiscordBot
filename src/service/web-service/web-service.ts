@@ -157,6 +157,10 @@ function parseBody<T>(body: T) {
 }
 
 function stringifyBody<T>(body: T) {
+  if(body == null) {
+    return undefined;
+  }
+
   return JSON.stringify(parseBody(body));
 }
 

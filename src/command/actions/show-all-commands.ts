@@ -13,7 +13,7 @@ export const showAllCommands = async (interaction: ChatInputCommandInteraction) 
     }
   });
 
-  const embed = embedUtils.createEmbed("Liste des commandes disponibles", fields);
+  const embed = embedUtils.informationEmbed("Liste des commandes disponibles", fields);
 
   await replyService.reply(interaction, { embeds: [embed.embed], files: embed.attachments });
 }

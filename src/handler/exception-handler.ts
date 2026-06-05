@@ -2,10 +2,11 @@ import { WebException } from '../service/web-service/web-exception.js';
 import {
   ChatInputCommandInteraction,
   MessageContextMenuCommandInteraction,
-  MessageFlags,
   ModalSubmitInteraction, PrimaryEntryPointCommandInteraction, UserContextMenuCommandInteraction
 } from 'discord.js';
 import { BotException } from '../exception/bot-exception.js';
+import { replyService } from '../utils/reply-service.js';
+import { embedUtils } from '../utils/embed-utils.js';
 
 class ExceptionHandler {
 
@@ -17,16 +18,11 @@ class ExceptionHandler {
       console.error(error);
     }
 
-    if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({
-        content: message,
-        flags: MessageFlags.Ephemeral,
-      });
-    } else {
-      await interaction.reply({
-        content: message,
-        flags: MessageFlags.Ephemeral,
-      });
+    const embed = embedUtils.errorEmbed("Erreur", [], message);
+    try {
+      await replyService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
+    } catch (e) {
+      console.error(e);
     }
   }
 

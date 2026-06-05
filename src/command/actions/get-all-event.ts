@@ -14,7 +14,7 @@ export const getAll = async (interaction: ChatInputCommandInteraction) => {
   });
 
   const description = fields.length == 0 ? "Aucun événement futur." : undefined;
-  const embed = embedUtils.createEmbed("Prochains événements", fields, description);
+  const embed = embedUtils.informationEmbed("Prochains événements", fields, description);
 
   await replyService.reply(interaction, { embeds: [embed.embed], files: embed.attachments });
 }

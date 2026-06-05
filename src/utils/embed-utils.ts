@@ -13,11 +13,10 @@ class EmbedUtils {
     return this.logo;
   }
 
-  createEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
+  private createEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], color: number = 0x0099ff, description?: string, urlPage?: string) {
     const embed = {
-      color: 0x0099ff,
+      color: color,
       title: title,
-      url: configuration.frontEndUrl + (urlPage != null ? urlPage : ''),
       author: {
         name: 'Event Organizer',
         icon_url: 'attachment://' + this.logoName,
@@ -37,6 +36,18 @@ class EmbedUtils {
       embed,
       attachments
     }
+  }
+
+  validationEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
+    return this.createEmbed(title, fields, 0x00B10B, description, urlPage);
+  }
+
+  informationEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
+    return this.createEmbed(title, fields, 0x0099ff, description, urlPage);
+  }
+
+  errorEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
+    return this.createEmbed(title, fields, 0xED0004, description, urlPage);
   }
 
 }

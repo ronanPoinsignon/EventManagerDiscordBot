@@ -46,6 +46,6 @@ export class UpdateSubEventModalWorkflow extends ModalWorkflow {
     const eventResult = await eventService.update(subEvent, event.eventName, interaction.user.id);
     const parentEvent = await eventService.findById(eventId, interaction.user.id);
 
-    await printEvent(interaction, parentEvent)
+    await printEvent(interaction, parentEvent);
   }
 }
