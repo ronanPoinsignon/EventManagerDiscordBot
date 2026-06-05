@@ -6,14 +6,27 @@ import { dateUtils } from './date-utils.js';
 class EmbedUtils {
 
   private logoName = "logo.png";
-  private logoPath = resourceService.getImage(this.logoName);
-  private logo = new AttachmentBuilder(this.logoPath!, { name: this.logoName });
+  private greenCheckName = "green-check.png";
+  private informationName = "information.png";
+  private redCrossName = "red-cross.png";
 
   getLogoAttachment() {
-    return this.logo;
+    return getAttachment(this.logoName);
   }
 
-  private createEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], color: number = 0x0099ff, description?: string, urlPage?: string) {
+  getGreenCheckAttachment() {
+    return getAttachment(this.greenCheckName);
+  }
+
+  getInformationAttachment() {
+    return getAttachment(this.informationName);
+  }
+
+  getRedCrossAttachment() {
+    return getAttachment(this.redCrossName);
+  }
+
+  private createEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], thumbnailImage: AttachmentBuilder, color: number = 0x0099ff, description?: string, urlPage?: string) {
     const embed = {
       color: color,
       title: title,
@@ -24,13 +37,13 @@ class EmbedUtils {
       },
       description: description,
       thumbnail: {
-        url: 'attachment://' + this.logoName,
+        url: 'attachment://' + thumbnailImage.name,
       },
       fields: fields,
       timestamp: dateUtils.now().toISOString()
     };
 
-    const attachments = [ this.getLogoAttachment() ];
+    const attachments = [ this.getLogoAttachment(), thumbnailImage ];
 
     return {
       embed,
@@ -39,17 +52,22 @@ class EmbedUtils {
   }
 
   validationEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
-    return this.createEmbed(title, fields, 0x00B10B, description, urlPage);
+    return this.createEmbed(title, fields, this.getGreenCheckAttachment(), 0x00B10B, description, urlPage);
   }
 
   informationEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
-    return this.createEmbed(title, fields, 0x0099ff, description, urlPage);
+    return this.createEmbed(title, fields, this.getInformationAttachment(), 0x0099ff, description, urlPage);
   }
 
   errorEmbed(title: string, fields: { name: string, value: string, inline?: boolean }[], description?: string, urlPage?: string) {
-    return this.createEmbed(title, fields, 0xED0004, description, urlPage);
+    return this.createEmbed(title, fields, this.getRedCrossAttachment(), 0xED0004, description, urlPage);
   }
 
+}
+
+const getAttachment = (name: string) => {
+  const logoPath = resourceService.getImage(name);
+  return new AttachmentBuilder(logoPath!, { name: name });
 }
 
 export const embedUtils = new EmbedUtils();
