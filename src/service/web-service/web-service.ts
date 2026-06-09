@@ -13,7 +13,7 @@ export class WebService {
 
   private static baseURL = configuration.apiURL.replace(/\/$/, "");
 
-  protected get<T>(url: string, userId: string, params?: Record<string, any>): Promise<T> {
+  protected get<T>(url: string, userId: string | null, params?: Record<string, any>): Promise<T> {
     return this.request(url, userId, "GET", params);
   }
 
@@ -25,7 +25,7 @@ export class WebService {
     return this.request(url, userId, "DELETE", params);
   }
 
-  private async request<T, U>(url: string, userId: string, method: "GET" | "POST" | "PUT" | "DELETE", params?: Record<string, any>, body?: U): Promise<T> {
+  private async request<T, U>(url: string, userId: string | null, method: "GET" | "POST" | "PUT" | "DELETE", params?: Record<string, any>, body?: U): Promise<T> {
     return this.makeRequest<T>(userId, this.asJsonResponse, url, method, params, stringifyBody(body), { "Content-Type": "application/json" });
   }
 
@@ -33,11 +33,11 @@ export class WebService {
     return await this.makeRequest(userId, this.asBlob, url, "POST", params, body);
   }
 
-  async getFile(url: string, userId: string, params?: Record<string, any>): Promise<Blob> {
+  async getFile(url: string, userId: string | null, params?: Record<string, any>): Promise<Blob> {
     return await this.makeRequest(userId, this.asBlob, url, "GET", params);
   }
 
-  private async makeRequest<T>(userId: string,
+  private async makeRequest<T>(userId: string | null,
                                handleResponse: (response: Response) => Promise<T>,
                                url: string,
                                method: "GET" | "POST" | "PUT" | "DELETE",
@@ -56,8 +56,10 @@ export class WebService {
 
     const headers: { [key: string]: string } = {
       ...specificHeaders,
-      Authorization: `Bearer ${token}`,
-      "X-Discord-User-Id": userId
+      Authorization: `Bearer ${token}`
+    }
+    if(userId != null) {
+      headers["X-Discord-User-Id"] = userId
     }
 
     const response = await fetch(

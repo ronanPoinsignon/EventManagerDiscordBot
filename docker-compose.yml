@@ -6,6 +6,8 @@ services:
       - KEYCLOAK_REALM=$KEYCLOAK_REALM
       - KEYCLOAK_CLIENT_NAME=$KEYCLOAK_CLIENT_NAME
       - KEYCLOAK_CLIENT_SECRET=$KEYCLOAK_CLIENT_SECRET
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
     build:
       context: .
@@ -15,8 +17,12 @@ services:
     networks:
       - pladonf_api
       - pladonf_auth
+      - pladonf_rabbitmq
+
 networks:
   pladonf_api:
     external: true
   pladonf_auth:
+    external: true
+  pladonf_rabbitmq:
     external: true

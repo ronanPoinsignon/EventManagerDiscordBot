@@ -12,6 +12,7 @@
     "commands": "tsx src/deploy-command.ts"
   },
   "dependencies": {
+    "amqplib": "^2.0.1",
     "discord.js": "^14.26.4"
   },
   "devDependencies": {

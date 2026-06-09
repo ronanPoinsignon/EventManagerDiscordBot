@@ -1,5 +1,8 @@
 import { getEnvironnement } from './environnement-manager.js'
 
+const rabbitUsername = process.env["RABBITMQ_USERNAME"]!;
+const rabbitPassowrd = process.env["RABBITMQ_PASSWORD"]!;
+
 export const configuration = {
     apiURL: getEnvironnement().apiUrl,
     frontEndUrl: getEnvironnement().frontEndUrl,
@@ -7,6 +10,7 @@ export const configuration = {
     keycloakRealm: process.env["KEYCLOAK_REALM"]!,
     keycloakClientId: process.env["KEYCLOAK_CLIENT_NAME"]!,
     keycloakClientSecret: process.env["KEYCLOAK_CLIENT_SECRET"]!,
+    rabbitURL: `amqp://${rabbitUsername}:${rabbitPassowrd}@` + getEnvironnement().rabbitURL,
     token: process.env['TOKEN']!,
     discordClientId: "1508982800437608590"
 }
