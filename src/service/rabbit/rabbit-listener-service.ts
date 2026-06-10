@@ -21,13 +21,23 @@ class RabbitListenerService {
   }
 
   private async startConsumer() {
-    console.info("Starting listening on rabbit");
+    console.info("Waiting for connection to rabbit");
     let connection = null;
-    try {
-      connection = await amqp.connect(configuration.rabbitURL);
-    } catch (e) {
-      console.error(e);
-      return;
+    while(connection == null) {
+      try {
+        connection = await amqp.connect(configuration.rabbitURL);
+      } catch (e) {
+        if(!(e instanceof Error)) {
+          throw e;
+        }
+
+        // @ts-ignore
+        if(e.code == "ECONNREFUSED") {
+        } else {
+          console.error(e);
+        }
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
     }
     console.info("Connected to rabbit");
     const channel = await connection.createChannel();
