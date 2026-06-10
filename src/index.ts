@@ -17,7 +17,7 @@ const client = new BotClient({ intents: [ GatewayIntentBits.Guilds ] });
 client.once(Events.ClientReady, (readyClient) => {
 	console.log(`Ready! Logged in as ${ readyClient.user.tag }`);
 
-	rabbitListenerService.addListener(new DiscordClientRabbitListener());
+	rabbitListenerService.addListener(new DiscordClientRabbitListener(client));
 
 	rabbitListenerService.startListening();
 });

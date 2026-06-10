@@ -38,7 +38,8 @@ export class CreateEventModalWorkflow extends ModalWorkflow {
       parentEvent: undefined,
       participants: [],
       todoList: [],
-      tricountUrl: tricount
+      tricountUrl: tricount,
+      guildIds: [ interaction.guildId! ],
     }
 
     const eventResult = await eventService.update(event, null, interaction.user.id);

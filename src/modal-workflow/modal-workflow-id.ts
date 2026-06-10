@@ -59,5 +59,9 @@ export const MODALS = {
     id: "updateEventNameModalId",
     eventId: "eventId",
     newEventName: "newEventNameId"
+  },
+  setChannelCommunication: {
+    id: "setChannelCommunicationModalId",
+    channelId: "channelId",
   }
 }
