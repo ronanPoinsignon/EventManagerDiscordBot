@@ -1,24 +1,43 @@
 import { Event } from '../../api/event.js';
 import { BotClient } from '../../botClient.js';
 import { discordGuildService } from '../../service/web-service/discord-guild-service.js';
+import { Notification } from '../../api/notification.js';
+import { userService } from '../../service/web-service/user-service.js';
+import { User } from '../../api/user.js';
 
-export const notify = async (client: BotClient, event: Event)=> {
+export const notify = async (client: BotClient, eventNotification: Notification<Event>)=> {
+  const event = eventNotification.entity;
   const guilds = event.guildIds;
   if(guilds.length == 0){
     return;
   }
 
+  const notifiedUsers = eventNotification.users;
+  if(notifiedUsers.length == 0){
+    return;
+  }
+
+  const participantIdMap = new Map(event.participants.map(user => [user.id, user]));
+  const notifiedUserInEvent = notifiedUsers.reduce((oldValue, user, value) => { return oldValue && participantIdMap.has(user.id)}, true);
+
+  let notifiedParticipants: User[] = [];
+  if(notifiedUserInEvent) {
+    notifiedParticipants = notifiedUsers.map(user => participantIdMap.get(user.id)!);
+  } else {
+    notifiedParticipants = await userService.findByUserIds(notifiedUsers.map(user => user.id), null);
+  }
+
+  notifiedParticipants = notifiedParticipants.filter(user => user.discordId != null);
+
   const promiseMap = guilds.map(async guildId => ({"guildId": guildId, "channelId": await discordGuildService.findCommunicationChannelFromGuildId(guildId, null).then(value => value.value)}));
   const channelsMap = (await Promise.all(promiseMap)).filter(map => map.channelId != null);
-
   const todoNotDone = event.todoList.filter(todo => !todo.done);
-  const participantIds = event.participants.map(p => p.discordId);
 
   if(channelsMap.length == 0){
     return;
   }
 
-  const textMentions = participantIds.map(id => `<@${id}>`).join(" ");
+  const textMentions = notifiedParticipants.map(user => `<@${user.discordId}>`).join(" ");
   const textDateInformation = `L'événement ${event.eventName} est prévu pour le <t:${event.startDate.getTime()}:s>.`
 
   let message = textMentions + "\n" + textDateInformation;

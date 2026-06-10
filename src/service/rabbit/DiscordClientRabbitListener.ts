@@ -13,7 +13,7 @@ export class DiscordClientRabbitListener implements RabbitListener {
   async onEventMessage(message: EventNotificationMessage) {
     try {
       const notification = await notificationService.findById<Event>(message.id, null);
-      await notify(this.client, notification.entity);
+      await notify(this.client, notification);
     } catch (e) {
       console.error(e);
     }

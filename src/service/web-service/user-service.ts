@@ -10,8 +10,18 @@ export class UserService extends WebService {
   }
 
   getAllUsers(userId: string): Promise<User[]> {
-    const route = this.getRoute("/")
-    return super.get<User[]>(route, userId).then((users: User[]) => users.filter(user => user.discordId != null));
+    const route = this.getRoute("/");
+    return super.get<User[]>(route, userId).then((users: User[]) => users);
+  }
+
+  findByUserId(searchedUserId: string, userId: string) {
+    const route = this.getRoute("/findById");
+    return super.get<User>(route, userId, { "userId": searchedUserId });
+  }
+
+  findByUserIds(searchedUserIds: string[], userId: string | null): Promise<User[]> {
+    const route = this.getRoute("/findByIds");
+    return super.get<User[]>(route, userId, { "userIds": searchedUserIds });
   }
 
 }
