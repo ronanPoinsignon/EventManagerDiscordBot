@@ -4,6 +4,8 @@ import { discordGuildService } from '../../service/web-service/discord-guild-ser
 import { Notification } from '../../api/notification.js';
 import { userService } from '../../service/web-service/user-service.js';
 import { User } from '../../api/user.js';
+import { messageService } from '../../utils/message-service.js';
+import { loggerService } from '../../service/log-service.js';
 
 export const notify = async (client: BotClient, eventNotification: Notification<Event>)=> {
   const event = eventNotification.entity;
@@ -50,17 +52,17 @@ export const notify = async (client: BotClient, eventNotification: Notification<
   for(const channelMap of channelsMap) {
     const guildId = channelMap.guildId;
     const channelId = channelMap.channelId;
-    const chanel = client.guilds.cache.find(guild => guild.id == guildId)?.channels.cache.find(chanel => chanel.id == channelId);
-    if(chanel == null) {
-      console.error(`Le channel ${channelId} n'existe plus.`);
+    const channel = client.guilds.cache.find(guild => guild.id == guildId)?.channels.cache.find(channel => channel.id == channelId);
+    if(channel == null) {
+      loggerService.info(`Le channel ${channelId} n'existe plus.`);
       return;
     }
 
-    if(!chanel.isSendable()) {
+    if(!channel.isSendable()) {
       return;
     }
 
-    chanel.send(message).catch(err => console.error(err));
+    await messageService.sendMessage(channel, message);
   }
 
 }

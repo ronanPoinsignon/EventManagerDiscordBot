@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { BotClient } from '../botClient.js';
 import { exceptionHandler } from './exception-handler.js';
+import { loggerService } from '../service/log-service.js';
 
 class MessageHandler {
 
@@ -8,7 +9,7 @@ class MessageHandler {
     const command = client.commands.get(interaction.commandName);
 
     if (!command) {
-      console.error(`No command matching ${interaction.commandName} was found.`);
+      loggerService.error(`No command matching ${interaction.commandName} was found.`);
       return;
     }
 

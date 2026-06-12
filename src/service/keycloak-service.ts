@@ -1,5 +1,6 @@
 import { configuration } from '../configuration.js';
 import { InternalServerErrorException } from './web-service/web-exception.js';
+import { loggerService } from './log-service.js';
 
 type TokenResponse = {
   access_token: string;
@@ -35,7 +36,7 @@ export class KeycloakService {
         body: params
       }
     ).catch(err => {
-      console.error(err);
+      loggerService.error(err);
       if(err instanceof Error && err.message === "fetch failed") {
         throw new InternalServerErrorException("Aucune réponse venant du gestionnaire d'utilisateurs.");
       }

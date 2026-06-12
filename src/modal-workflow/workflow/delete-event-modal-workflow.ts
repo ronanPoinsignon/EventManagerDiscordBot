@@ -4,7 +4,7 @@ import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
-import { replyService } from '../../utils/reply-service.js';
+import { messageService } from '../../utils/message-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 
 @registerModal(MODALS.deleteEvent.id)
@@ -22,6 +22,6 @@ export class DeleteEventModalWorkflow extends ModalWorkflow {
     const deletedEvent = await eventService.deleteEvent(eventId, interaction.user.id);
 
     const embed = embedUtils.validationEmbed("Suppression d'événement", [], `L'événement ${deletedEvent.eventName} a bien été supprimé.`);
-    await replyService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
+    await messageService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
   }
 }

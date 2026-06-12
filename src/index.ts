@@ -5,17 +5,18 @@ import { modalHandler } from './handler/modal-handler.js';
 import { messageHandler } from './handler/message-handler.js';
 import { interactionHandler } from './handler/interaction-handler.js';
 import { commandUtils } from './utils/command-utils.js';
-import { replyService } from './utils/reply-service.js';
+import { messageService } from './utils/message-service.js';
 import { embedUtils } from './utils/embed-utils.js';
 import { rabbitListenerService } from './service/rabbit/rabbit-listener-service.js';
 import { RabbitListener } from './service/rabbit/rabbit-listener.js';
 import { EventNotificationMessage } from './service/rabbit/message/EventNotificationMessage.js';
 import { DiscordClientRabbitListener } from './service/rabbit/DiscordClientRabbitListener.js';
+import { loggerService } from './service/log-service.js';
 
 const client = new BotClient({ intents: [ GatewayIntentBits.Guilds ] });
 
 client.once(Events.ClientReady, (readyClient) => {
-	console.log(`Ready! Logged in as ${ readyClient.user.tag }`);
+	loggerService.info(`Ready! Logged in as ${ readyClient.user.tag }`);
 
 	rabbitListenerService.addListener(new DiscordClientRabbitListener(client));
 
@@ -37,13 +38,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			try {
 				return await interactionHandler.handle(interaction);
 			} catch (e) {
-				console.error('erreur autocomplete : ', e);
+				loggerService.error('erreur autocomplete : ', e);
 			}
 		}
 	} catch (error) {
 		if (!(error instanceof Error)) {
 			const embed = embedUtils.errorEmbed('Erreur inconnue', [], 'Une erreur inconnue est survenue.');
-			await replyService.replyEmbed(interaction as ChatInputCommandInteraction | ModalSubmitInteraction, {
+			await messageService.replyEmbed(interaction as ChatInputCommandInteraction | ModalSubmitInteraction, {
 				embed: [ embed.embed ],
 				attachment: embed.attachments
 			});
@@ -51,7 +52,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		}
 
 		const embed = embedUtils.errorEmbed('Erreur', [], error.message);
-		await replyService.replyEmbed(interaction as ChatInputCommandInteraction | ModalSubmitInteraction, {
+		await messageService.replyEmbed(interaction as ChatInputCommandInteraction | ModalSubmitInteraction, {
 			embed: [ embed.embed ],
 			attachment: embed.attachments
 		});

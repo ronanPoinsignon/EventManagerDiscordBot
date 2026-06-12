@@ -2,6 +2,7 @@ import amqp from "amqplib";
 import { configuration } from '../../configuration.js';
 import { RabbitListener } from './rabbit-listener.js';
 import { EventNotificationMessage } from './message/EventNotificationMessage.js';
+import { loggerService } from '../log-service.js';
 
 class RabbitListenerService {
 
@@ -21,7 +22,7 @@ class RabbitListenerService {
   }
 
   private async startConsumer() {
-    console.info("Waiting for connection to rabbit");
+    loggerService.info("Waiting for connection to rabbit");
     let connection = null;
     while(connection == null) {
       try {
@@ -32,14 +33,14 @@ class RabbitListenerService {
         }
 
         // @ts-ignore
-        if(e.code == "ECONNREFUSED") {
+        if(e.code == "ENOTFOUND" || e.code == "ECONNREFUSED") {
         } else {
-          console.error(e);
+          loggerService.error(e);
         }
         await new Promise(resolve => setTimeout(resolve, 5000));
       }
     }
-    console.info("Connected to rabbit");
+    loggerService.info("Connected to rabbit");
     const channel = await connection.createChannel();
 
     const queue = "discord.notifications";
@@ -48,8 +49,6 @@ class RabbitListenerService {
       durable: true,
     });
 
-    console.log("Waiting for messages...");
-
     channel.consume(queue, async (msg) => {
       if (!msg) return;
 
@@ -57,12 +56,11 @@ class RabbitListenerService {
         const content = msg.content.toString();
         const message: EventNotificationMessage = JSON.parse(content);
 
-        console.log("Message reçu:", message);
         this.listeners.forEach(listener => listener.onEventMessage(message));
 
         channel.ack(msg);
       } catch (err) {
-        console.error("Erreur traitement message", err);
+        loggerService.error("Erreur traitement message", err);
 
         channel.nack(msg, false, false);
       }

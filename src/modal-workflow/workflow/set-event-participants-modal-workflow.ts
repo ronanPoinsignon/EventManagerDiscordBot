@@ -4,7 +4,7 @@ import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
-import { replyService } from '../../utils/reply-service.js';
+import { messageService } from '../../utils/message-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 
 @registerModal(MODALS.addEventParticipant.id)
@@ -23,6 +23,6 @@ export class SetEventParticipantsModalWorkflow extends ModalWorkflow {
     const todoResult = await eventService.setEventParticipant(eventId, [...participants], interaction.user.id);
 
     const embed = embedUtils.validationEmbed("Modification des participants", [], `Les participants ont bien été modifiés.`);
-    await replyService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
+    await messageService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
   }
 }

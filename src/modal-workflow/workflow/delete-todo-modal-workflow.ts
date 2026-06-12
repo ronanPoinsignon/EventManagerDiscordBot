@@ -4,7 +4,7 @@ import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
 import { todoService } from '../../service/web-service/todo-service.js';
-import { replyService } from '../../utils/reply-service.js';
+import { messageService } from '../../utils/message-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 
 @registerModal(MODALS.deleteTodo.id)
@@ -22,6 +22,6 @@ export class DeleteTodoModalWorkflow extends ModalWorkflow {
     const todoResult = await todoService.deleteTodo(todoId, interaction.user.id);
 
     const embed = embedUtils.validationEmbed("Suppression de todo", [], `Le todo ${todoResult.name} a bien été supprimé.`);
-    await replyService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
+    await messageService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
   }
 }

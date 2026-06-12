@@ -1,6 +1,6 @@
 import { embedUtils } from '../../utils/embed-utils.js';
 import { ChatInputCommandInteraction } from 'discord.js';
-import { replyService } from '../../utils/reply-service.js';
+import { messageService } from '../../utils/message-service.js';
 import { commandUtils } from '../../utils/command-utils.js';
 
 export const showAllCommands = async (interaction: ChatInputCommandInteraction) => {
@@ -15,5 +15,5 @@ export const showAllCommands = async (interaction: ChatInputCommandInteraction) 
 
   const embed = embedUtils.informationEmbed("Liste des commandes disponibles", fields);
 
-  await replyService.reply(interaction, { embeds: [embed.embed], files: embed.attachments });
+  await messageService.reply(interaction, { embeds: [embed.embed], files: embed.attachments });
 }

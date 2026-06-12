@@ -5,8 +5,9 @@ import {
   ModalSubmitInteraction, PrimaryEntryPointCommandInteraction, UserContextMenuCommandInteraction
 } from 'discord.js';
 import { BotException } from '../exception/bot-exception.js';
-import { replyService } from '../utils/reply-service.js';
+import { messageService } from '../utils/message-service.js';
 import { embedUtils } from '../utils/embed-utils.js';
+import { loggerService } from '../service/log-service.js';
 
 class ExceptionHandler {
 
@@ -15,14 +16,14 @@ class ExceptionHandler {
     if(error instanceof WebException || error instanceof BotException) {
       message = error.message;
     } else {
-      console.error(error);
+      loggerService.error(error);
     }
 
     const embed = embedUtils.errorEmbed("Erreur", [], message);
     try {
-      await replyService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
+      await messageService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
     } catch (e) {
-      console.error(e);
+      loggerService.error(e);
     }
   }
 

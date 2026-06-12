@@ -1,10 +1,9 @@
-import { ChannelType, ModalSubmitInteraction } from 'discord.js';
+import { ModalSubmitInteraction } from 'discord.js';
 import { ModalWorkflow } from '../modal-workflow.js';
 import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
-import { todoService } from '../../service/web-service/todo-service.js';
-import { replyService } from '../../utils/reply-service.js';
+import { messageService } from '../../utils/message-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 import { discordGuildService } from '../../service/web-service/discord-guild-service.js';
 
@@ -24,6 +23,6 @@ export class DeleteTodoModalWorkflow extends ModalWorkflow {
     const channel = interaction.guild!.channels.cache.find(channel => channel.id === channelId)
 
     const embed = embedUtils.validationEmbed("Spécification du salon de communication du bot", [], `Le salon ${channel?.name} est défini comme le salon de communication.`);
-    await replyService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
+    await messageService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
   }
 }

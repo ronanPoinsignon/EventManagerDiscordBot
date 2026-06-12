@@ -12,7 +12,7 @@ import {
 import { Event, SubEvent } from '../../api/event.js';
 import { userUtils } from '../../utils/user-utils.js';
 import { localFileService } from '../../service/local-file-service.js';
-import { replyService } from '../../utils/reply-service.js';
+import { messageService } from '../../utils/message-service.js';
 import { dateUtils } from '../../utils/date-utils.js';
 import { resourceService } from '../../service/resource-service.js';
 
@@ -75,7 +75,7 @@ export const printEvent = async (
     container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## 📓 Programme\n${printSubEvents(event.subEvents)}`));
   }
 
-  await replyService.reply(interaction, { components: [container], files: attachments, flags: MessageFlags.IsComponentsV2 });
+  await messageService.reply(interaction, { components: [container], files: attachments, flags: MessageFlags.IsComponentsV2 });
 }
 
 const getTitleInfo = (event: Event) => {

@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { fileURLToPath } from 'url';
 import { exceptionHandler } from './exception-handler.js';
+import { loggerService } from '../service/log-service.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -36,13 +37,13 @@ class ModalHandler {
 
     await Promise.all(imports);
 
-    console.log(`Loaded ${files.length} modal workflows`);
+    loggerService.info(`Loaded ${files.length} modal workflows`);
   }
 
   async handle(interaction: ModalSubmitInteraction) {
     const modal = this.modalHandlerList.get(interaction.customId);
     if(modal == null) {
-      console.error(`Aucune gestion de modal pour l'id " + ${interaction.customId}.`);
+      loggerService.error(`Aucune gestion de modal pour l'id " + ${interaction.customId}.`);
       return;
     }
 

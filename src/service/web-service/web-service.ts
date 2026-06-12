@@ -8,6 +8,7 @@ import {
 import { configuration } from '../../configuration.js';
 import { dateUtils } from '../../utils/date-utils.js';
 import { isDate } from 'node:util/types';
+import { loggerService } from '../log-service.js';
 
 export class WebService {
 
@@ -74,7 +75,7 @@ export class WebService {
         throw new InternalServerErrorException("Aucune réponse venant du serveur.");
       }
 
-      console.error(err);
+      loggerService.error(err);
       throw new InternalServerErrorException("Une erreur est survenue.");
     });
 
