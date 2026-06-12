@@ -55,6 +55,16 @@ class EventService extends WebService {
     return this.post(route, userId, { eventId: eventId, "userIds": participantIds })
   }
 
+  addEventParticipant(eventId: string, participantIds: string[], userId: string): Promise<Event> {
+    const route = this.getRoute("/participants/discord/add");
+    return this.post(route, userId, { eventId: eventId, "userIds": participantIds })
+  }
+
+  removeEventParticipant(eventId: string, participantIds: string[], userId: string): Promise<Event> {
+    const route = this.getRoute("/participants/discord/remove");
+    return this.post(route, userId, { eventId: eventId, "userIds": participantIds })
+  }
+
   addTodo(eventId: string, todo: {name: string, todo: string}, userIds: string[], isDone: boolean, userId: string): Promise<Event> {
     const route = this.getRoute("/todos/addTodo");
     return this.post(route, userId, {"eventId": eventId, "userIds": userIds, "done": isDone}, todo);

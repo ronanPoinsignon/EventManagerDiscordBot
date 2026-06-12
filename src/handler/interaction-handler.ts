@@ -1,6 +1,7 @@
 import { AutocompleteInteraction } from 'discord.js';
 import { eventService } from '../service/web-service/event-service.js';
 import { eventUtils } from '../utils/event-utils.js';
+import { Event } from '../api/event.js';
 
 class InteractionHandler {
 
@@ -24,6 +25,17 @@ class InteractionHandler {
       const results = eventUtils.getAllEventFromEventArray(events).filter(event => event.level > 0);
       await interaction.respond(
         results.filter(event => event.name.includes(focused.value)).slice(0, 25).map(r => ({
+          name: r.name,
+          value: r.value.id + ""
+        }))
+      );
+    }
+
+    if("event-program-name" === focused.name) {
+      const events = await eventService.findActive(interaction.user.id);
+      const results = eventUtils.getAllEventFromEventArray(events);
+      await interaction.respond(
+        results.filter(event => event.name.toLowerCase().includes(focused.value.toLowerCase())).slice(0, 25).map(r => ({
           name: r.name,
           value: r.value.id + ""
         }))
