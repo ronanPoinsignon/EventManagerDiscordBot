@@ -13,6 +13,8 @@ class MessageHandler {
       return;
     }
 
+    await interaction.deferReply();
+
     try {
       await command.execute(interaction);
     } catch (error: any) {
