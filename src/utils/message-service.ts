@@ -31,9 +31,9 @@ class MessageService {
               value: { embed: (JSONEncodable<APIEmbed> | APIEmbed)[], attachment: AttachmentBuilder[] }) {
     const message = { embeds: value.embed, files: value.attachment };
     if (interaction.replied || interaction.deferred) {
-      await this.sendmessage(interaction.followUp, message);
+      await this.sendmessage(interaction.followUp.bind(interaction), message);
     } else {
-      await this.sendmessage(interaction.reply, message);
+      await this.sendmessage(interaction.reply.bind(interaction), message);
     }
   }
 
