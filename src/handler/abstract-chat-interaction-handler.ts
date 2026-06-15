@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { messageService } from '../utils/message-service.js';
+import { messageService } from '../service/message-service.js';
 import { AbstractInteractionHandler } from './abstract-interaction-handler.js';
 
 export abstract class AbstractChatInteractionHandler<T extends ChatInputCommandInteraction> extends AbstractInteractionHandler<T> {

@@ -12,7 +12,7 @@ import {
 import { Event, SubEvent } from '../../api/event.js';
 import { userUtils } from '../../utils/user-utils.js';
 import { localFileService } from '../../service/local-file-service.js';
-import { messageService } from '../../utils/message-service.js';
+import { messageService } from '../../service/message-service.js';
 import { dateUtils } from '../../utils/date-utils.js';
 import { resourceService } from '../../service/resource-service.js';
 

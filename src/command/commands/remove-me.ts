@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { BotException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
-import { messageService } from '../../utils/message-service.js';
+import { messageService } from '../../service/message-service.js';
 
 export const command = new Command(
   new SlashCommandBuilder().setName('remove-me').setDescription('S\'enlever d\'un un événement ou d\'un programme.')

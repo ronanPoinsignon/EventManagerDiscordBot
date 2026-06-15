@@ -1,5 +1,5 @@
 import { BaseInteraction } from 'discord.js';
-import { messageService } from '../utils/message-service.js';
+import { messageService } from '../service/message-service.js';
 
 export abstract class AbstractInteractionHandler<T extends BaseInteraction> {
 

@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { commandUtils } from '../../utils/command-utils.js';
 import { embedUtils } from '../../utils/embed-utils.js';
-import { messageService } from '../../utils/message-service.js';
+import { messageService } from '../../service/message-service.js';
 import { loggerService } from '../../service/log-service.js';
 
 export const showCommand = async (interaction: ChatInputCommandInteraction, commandName: string) => {

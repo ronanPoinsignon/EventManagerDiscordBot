@@ -5,7 +5,7 @@ import {
   ModalSubmitInteraction, PrimaryEntryPointCommandInteraction, UserContextMenuCommandInteraction
 } from 'discord.js';
 import { BotException } from '../exception/bot-exception.js';
-import { messageService } from '../utils/message-service.js';
+import { messageService } from '../service/message-service.js';
 import { embedUtils } from '../utils/embed-utils.js';
 import { loggerService } from '../service/log-service.js';
 

@@ -2,7 +2,7 @@ import { eventService } from '../../service/web-service/event-service.js';
 import { dateUtils } from '../../utils/date-utils.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 import { ChatInputCommandInteraction } from 'discord.js';
-import { messageService } from '../../utils/message-service.js';
+import { messageService } from '../../service/message-service.js';
 
 export const getAll = async (interaction: ChatInputCommandInteraction) => {
   const events = await eventService.findActive(interaction.user.id);

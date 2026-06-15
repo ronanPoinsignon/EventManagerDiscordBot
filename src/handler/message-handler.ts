@@ -4,7 +4,7 @@ import { loggerService } from '../service/log-service.js';
 import { commandUtils } from '../utils/command-utils.js';
 import { AbstractChatInteractionHandler } from './abstract-chat-interaction-handler.js';
 import { Command } from '../command/command.js';
-import { messageService } from '../utils/message-service.js';
+import { messageService } from '../service/message-service.js';
 
 let commandMap = new Map<string, Command>();
 commandUtils.getCommandMap().then(map => {

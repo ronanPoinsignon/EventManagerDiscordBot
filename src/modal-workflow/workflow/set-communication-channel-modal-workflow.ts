@@ -3,7 +3,7 @@ import { ModalWorkflow } from '../modal-workflow.js';
 import { registerModal } from '../../handler/modal-handler.js';
 import { MODALS } from '../modal-workflow-id.js';
 import { BotException } from '../../exception/bot-exception.js';
-import { messageService } from '../../utils/message-service.js';
+import { messageService } from '../../service/message-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 import { discordGuildService } from '../../service/web-service/discord-guild-service.js';
 

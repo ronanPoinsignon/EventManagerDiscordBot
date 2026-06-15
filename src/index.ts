@@ -4,7 +4,7 @@ import { modalHandler } from './handler/modal-handler.js';
 import { messageHandler } from './handler/message-handler.js';
 import { autocompleteHandler } from './handler/autocomplete-handler.js';
 import { commandUtils } from './utils/command-utils.js';
-import { messageService } from './utils/message-service.js';
+import { messageService } from './service/message-service.js';
 import { embedUtils } from './utils/embed-utils.js';
 import { rabbitListenerService } from './service/rabbit/rabbit-listener-service.js';
 import { DiscordClientRabbitListener } from './service/rabbit/DiscordClientRabbitListener.js';

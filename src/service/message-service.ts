@@ -6,7 +6,7 @@ import {
 } from 'discord.js';
 import { JSONEncodable } from '@discordjs/util';
 import { exceptionHandler } from '../handler/exception-handler.js';
-import { loggerService } from '../service/log-service.js';
+import { loggerService } from './log-service.js';
 
 class MessageService {
 

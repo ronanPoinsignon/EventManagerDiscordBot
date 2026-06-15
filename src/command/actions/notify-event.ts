@@ -3,7 +3,7 @@ import { discordGuildService } from '../../service/web-service/discord-guild-ser
 import { Notification } from '../../api/notification.js';
 import { userService } from '../../service/web-service/user-service.js';
 import { User } from '../../api/user.js';
-import { messageService } from '../../utils/message-service.js';
+import { messageService } from '../../service/message-service.js';
 import { loggerService } from '../../service/log-service.js';
 import { Client } from 'discord.js';
 
