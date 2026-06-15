@@ -1,5 +1,5 @@
 import { Command } from '../command.js';
-import { SlashCommandBuilder } from 'discord.js';
+import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { showSetChannelInformation } from '../actions/show-set-channel-information.js';
 
 export const command = new Command(
@@ -7,5 +7,6 @@ export const command = new Command(
   async (interaction) => {
     const modal = await showSetChannelInformation(interaction);
     await interaction.showModal(modal);
-  }
+  },
+  [ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ManageChannels ]
 );

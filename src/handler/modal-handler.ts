@@ -42,7 +42,7 @@ class ModalHandler extends AbstractInteractionHandler<ModalSubmitInteraction> {
     loggerService.info(`Loaded ${files.length} modal workflows`);
   }
 
-  async handle(interaction: ModalSubmitInteraction) {
+  async handleInternal(interaction: ModalSubmitInteraction) {
     const modal = this.modalHandlerList.get(interaction.customId);
     if(modal == null) {
       loggerService.error(`Aucune gestion de modal pour l'id " + ${interaction.customId}.`);

@@ -3,7 +3,7 @@ import { SharedSlashCommand } from '@discordjs/builders';
 
 export class Command {
 
-    constructor(public data: SharedSlashCommand, private runnable: (interaction: ChatInputCommandInteraction) => Promise<void>) {
+    constructor(public data: SharedSlashCommand, private runnable: (interaction: ChatInputCommandInteraction) => Promise<void>, public permissions: bigint[] = []) {
     }
 
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {

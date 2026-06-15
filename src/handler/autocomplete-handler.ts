@@ -5,7 +5,7 @@ import { AbstractInteractionHandler } from './abstract-interaction-handler.js';
 
 class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInteraction> {
 
-  async handle(interaction: AutocompleteInteraction) {
+  async handleInternal(interaction: AutocompleteInteraction) {
 
     const focused = interaction.options.getFocused(true);
 
