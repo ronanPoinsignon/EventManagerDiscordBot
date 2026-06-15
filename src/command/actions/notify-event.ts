@@ -1,13 +1,13 @@
 import { Event } from '../../api/event.js';
-import { BotClient } from '../../botClient.js';
 import { discordGuildService } from '../../service/web-service/discord-guild-service.js';
 import { Notification } from '../../api/notification.js';
 import { userService } from '../../service/web-service/user-service.js';
 import { User } from '../../api/user.js';
 import { messageService } from '../../utils/message-service.js';
 import { loggerService } from '../../service/log-service.js';
+import { Client } from 'discord.js';
 
-export const notify = async (client: BotClient, eventNotification: Notification<Event>)=> {
+export const notify = async (client: Client, eventNotification: Notification<Event>)=> {
   const event = eventNotification.entity;
   const guilds = event.guildIds;
   if(guilds.length == 0){

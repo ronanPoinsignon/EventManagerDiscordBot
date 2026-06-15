@@ -1,12 +1,17 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { BotClient } from '../botClient.js';
 import { exceptionHandler } from './exception-handler.js';
 import { loggerService } from '../service/log-service.js';
+import { commandUtils } from '../utils/command-utils.js';
+
+let commandMap = new Map();
+commandUtils.getCommandMap().then(map => {
+  commandMap = map;
+});
 
 class MessageHandler {
 
-  async handle(client: BotClient, interaction: ChatInputCommandInteraction) {
-    const command = client.commands.get(interaction.commandName);
+  async handle(interaction: ChatInputCommandInteraction) {
+    const command = commandMap.get(interaction.commandName);
 
     if (!command) {
       loggerService.error(`No command matching ${interaction.commandName} was found.`);

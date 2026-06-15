@@ -19,6 +19,11 @@ class CommandUtils {
     return await this.commandPromise;
   }
 
+  async getCommandMap() {
+    const commandList = await this.getCommandList();
+    return new Map(commandList.map(command => [ command.data.name, command ]));
+  }
+
   private async getCommandListInternal() {
     const commands: Command[] = [];
     let helpCommand: HelpCommand;
