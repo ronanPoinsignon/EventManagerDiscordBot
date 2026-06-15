@@ -1,9 +1,8 @@
 import { AutocompleteInteraction } from 'discord.js';
 import { eventService } from '../service/web-service/event-service.js';
 import { eventUtils } from '../utils/event-utils.js';
-import { Event } from '../api/event.js';
 
-class InteractionHandler {
+class AutocompleteHandler {
 
   async handle(interaction: AutocompleteInteraction) {
 
@@ -56,4 +55,4 @@ class InteractionHandler {
 
 }
 
-export const interactionHandler = new InteractionHandler();
+export const autocompleteHandler = new AutocompleteHandler();

@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, Client, Events, GatewayIntentBits, ModalSu
 import { configuration } from './configuration.js';
 import { modalHandler } from './handler/modal-handler.js';
 import { messageHandler } from './handler/message-handler.js';
-import { interactionHandler } from './handler/interaction-handler.js';
+import { autocompleteHandler } from './handler/autocomplete-handler.js';
 import { commandUtils } from './utils/command-utils.js';
 import { messageService } from './utils/message-service.js';
 import { embedUtils } from './utils/embed-utils.js';
@@ -29,7 +29,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		}
 		if (interaction.isAutocomplete()) {
 			try {
-				return await interactionHandler.handle(interaction);
+				return await autocompleteHandler.handle(interaction);
 			} catch (e) {
 				loggerService.error('erreur autocomplete : ', e);
 			}
