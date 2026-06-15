@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000',
-  frontEndUrl: 'http://localhost:4200',
-  keycloakURL: 'http://localhost:8080',
-  rabbitURL: 'localhost:5672'
+  apiUrl: 'http://localhost:' + process.env.API_PORT,
+  frontEndUrl: 'http://localhost:' + process.env.FRONTEND_PORT,
+  keycloakURL: 'http://localhost:' + process.env.KEYCLOAK_PORT,
+  rabbitURL: 'localhost:' + process.env.RABBITMQ_PORT,
 };
