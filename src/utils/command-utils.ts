@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import fs from 'node:fs';
 import { fileURLToPath } from 'url';
 import { HelpCommand } from '../command/commands/help.js';
+import { loggerService } from '../service/log-service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +44,9 @@ class CommandUtils {
     }
 
     helpCommand!.setCommandList(commands.sort((c1, c2) => c1.data.name.localeCompare(c2.data.name)));
+
+    loggerService.info(`Loaded ${commands.length} commands.`);
+
     return commands;
   }
 
