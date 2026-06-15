@@ -26,8 +26,6 @@ class MessageHandler extends AbstractChatInteractionHandler<ChatInputCommandInte
       return;
     }
 
-    await interaction.deferReply();
-
     try {
       await command.execute(interaction);
     } catch (error: any) {
