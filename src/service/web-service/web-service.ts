@@ -63,12 +63,16 @@ export class WebService {
       headers["X-Discord-User-Id"] = userId
     }
 
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 5000);
+
     const response = await fetch(
       WebService.baseURL + url + "?" + query,
       {
         headers: headers,
         method: method,
-        body: body
+        body: body,
+        signal: controller.signal
       }
     ).catch(err => {
       if(err instanceof Error && err.message === "fetch failed") {
