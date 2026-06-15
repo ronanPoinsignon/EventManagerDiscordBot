@@ -1,4 +1,4 @@
-import amqp from "amqplib";
+import amqp, { Channel, ChannelModel } from 'amqplib';
 import { configuration } from '../../configuration.js';
 import { RabbitListener } from './rabbit-listener.js';
 import { EventNotificationMessage } from './message/EventNotificationMessage.js';
@@ -8,48 +8,93 @@ class RabbitListenerService {
 
   private listeners: RabbitListener[] = [];
   private isListening: boolean = false;
+  private isReconnecting: boolean = false;
 
-  constructor() {
-
-  }
+  private connection?: ChannelModel;
+  private channel?: Channel;
 
   startListening() {
     if(this.isListening) {
       return;
     }
 
+    this.isListening = true
     this.startConsumer();
+  }
+
+  private async connect() {
+    if(this.isReconnecting) {
+      return;
+    }
+
+    this.isReconnecting = true;
+
+    try {
+      while(this.connection == null) {
+        try {
+          this.connection = await amqp.connect(configuration.rabbitURL);
+        } catch (e) {
+          if(!(e instanceof Error)) {
+            throw e;
+          }
+
+          const ignoredMessages = [
+            "Socket closed abruptly during opening handshake"
+          ];
+          const ignoredCodes = [
+            "ENOTFOUND",
+            "ECONNREFUSED",
+            "ECONNRESET"
+          ];
+
+          // @ts-ignore
+          if(ignoredCodes.indexOf(e.code) >= 0 || ignoredMessages.indexOf(e.message) >= 0) {
+          } else {
+            loggerService.error(e);
+          }
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        }
+      }
+
+      loggerService.info("Connected to rabbit");
+
+      this.connection.on("close", () => {
+        loggerService.info("Connection closed. Waiting for reconnection");
+        this.channel?.removeAllListeners();
+        this.connection?.removeAllListeners();
+        this.channel = undefined;
+        this.connection = undefined;
+
+        if (!this.isReconnecting) {
+          void this.connect();
+        }
+      });
+      this.connection.on("error", (err: Error) => {
+        loggerService.error(err);
+      });
+      await this.manageChannel(this.connection);
+    } finally {
+      this.isReconnecting = false;
+    }
   }
 
   private async startConsumer() {
     loggerService.info("Waiting for connection to rabbit");
-    let connection = null;
-    while(connection == null) {
-      try {
-        connection = await amqp.connect(configuration.rabbitURL);
-      } catch (e) {
-        if(!(e instanceof Error)) {
-          throw e;
-        }
+    await this.connect();
+  }
 
-        // @ts-ignore
-        if(e.code == "ENOTFOUND" || e.code == "ECONNREFUSED") {
-        } else {
-          loggerService.error(e);
-        }
-        await new Promise(resolve => setTimeout(resolve, 5000));
-      }
-    }
-    loggerService.info("Connected to rabbit");
-    const channel = await connection.createChannel();
+  private async manageChannel(connection: ChannelModel) {
+    this.channel = await connection.createChannel();
 
     const queue = "discord.notifications";
 
-    await channel.assertQueue(queue, {
+    await this.channel.assertQueue(queue, {
       durable: true,
     });
 
-    channel.consume(queue, async (msg) => {
+    // scope local du channel pour éviter les changements de channel après une possible reconnexion
+    const channel = this.channel;
+    await channel.consume(queue, async (msg) => {
       if (!msg) return;
 
       try {
@@ -58,11 +103,15 @@ class RabbitListenerService {
 
         this.listeners.forEach(listener => listener.onEventMessage(message));
 
-        channel.ack(msg);
+        try {
+          channel.ack(msg);
+        } catch {}
       } catch (err) {
         loggerService.error("Erreur traitement message", err);
 
-        channel.nack(msg, false, false);
+        try {
+          channel.nack(msg, false, false);
+        } catch {}
       }
     });
   }
