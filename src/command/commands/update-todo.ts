@@ -5,7 +5,7 @@ import { UserException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
 
 export const command = new Command(
-  new SlashCommandBuilder().setName('update-todo').setDescription('Modifier un todo existant')
+  new SlashCommandBuilder().setName('update-todo').setDescription('Modifier une tâche')
     .addStringOption(option => option.setName("todo-name").setDescription("Le nom du todo").setAutocomplete(true).setRequired(true)),
   async (interaction) => {
     const todoId = interaction.options.getString("todo-name");

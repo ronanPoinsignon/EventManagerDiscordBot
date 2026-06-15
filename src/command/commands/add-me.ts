@@ -6,7 +6,7 @@ import { embedUtils } from '../../utils/embed-utils.js';
 import { messageService } from '../../utils/message-service.js';
 
 export const command = new Command(
-  new SlashCommandBuilder().setName('add-me').setDescription('S\'ajouter à un événement ou un programme.')
+  new SlashCommandBuilder().setName('add-me').setDescription('S\'ajouter à un événement ou un programme')
     .addStringOption((option) => option.setName("event-program-name").setDescription("Le nom de l'événement ou du programme.").setAutocomplete(true).setRequired(true)),
   async (interaction) => {
     const eventId = interaction.options.getString("event-program-name");
