@@ -2,13 +2,14 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { exceptionHandler } from './exception-handler.js';
 import { loggerService } from '../service/log-service.js';
 import { commandUtils } from '../utils/command-utils.js';
+import { AbstractInteractionHandler } from './abstract-interaction-handler.js';
 
 let commandMap = new Map();
 commandUtils.getCommandMap().then(map => {
   commandMap = map;
 });
 
-class MessageHandler {
+class MessageHandler extends AbstractInteractionHandler<ChatInputCommandInteraction> {
 
   async handle(interaction: ChatInputCommandInteraction) {
     const command = commandMap.get(interaction.commandName);

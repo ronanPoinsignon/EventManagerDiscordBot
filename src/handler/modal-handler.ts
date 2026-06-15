@@ -6,10 +6,11 @@ import { pathToFileURL } from 'node:url';
 import { fileURLToPath } from 'url';
 import { exceptionHandler } from './exception-handler.js';
 import { loggerService } from '../service/log-service.js';
+import { AbstractInteractionHandler } from './abstract-interaction-handler.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-class ModalHandler {
+class ModalHandler extends AbstractInteractionHandler<ModalSubmitInteraction> {
 
   private modalHandlerList: Collection<string, ModalWorkflow> = new Collection();
 
@@ -23,6 +24,7 @@ class ModalHandler {
   }
 
   constructor() {
+    super();
     this.loadModalWorkflows();
   }
 

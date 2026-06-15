@@ -1,8 +1,9 @@
 import { AutocompleteInteraction } from 'discord.js';
 import { eventService } from '../service/web-service/event-service.js';
 import { eventUtils } from '../utils/event-utils.js';
+import { AbstractInteractionHandler } from './abstract-interaction-handler.js';
 
-class AutocompleteHandler {
+class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInteraction> {
 
   async handle(interaction: AutocompleteInteraction) {
 
