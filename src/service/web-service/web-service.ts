@@ -64,7 +64,7 @@ export class WebService {
     }
 
     const controller = new AbortController();
-    setTimeout(() => controller.abort(), 5000);
+    const timeout = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch(
       WebService.baseURL + url + "?" + query,
@@ -81,7 +81,7 @@ export class WebService {
 
       loggerService.error(err);
       throw new InternalServerErrorException("Une erreur est survenue.");
-    });
+    }).finally(() => clearTimeout(timeout));
 
     if(!response.ok) {
       throw this.handleError(await response.json() as ErrorBody);
