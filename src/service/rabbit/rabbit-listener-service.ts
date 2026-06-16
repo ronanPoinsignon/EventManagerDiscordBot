@@ -101,7 +101,7 @@ class RabbitListenerService {
         const content = msg.content.toString();
         const message: EventNotificationMessage = JSON.parse(content);
 
-        this.listeners.forEach(listener => listener.onEventMessage(message));
+        await Promise.all(this.listeners.map( listener => listener.onEventMessage(message)));
 
         try {
           channel.ack(msg);
