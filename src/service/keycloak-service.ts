@@ -12,12 +12,26 @@ export class KeycloakService {
   private accessToken: string | null = null;
   private expiresAt: number | null = null;
 
+  private refreshPromise?: Promise<string>;
+  private readonly SAFETY_MARGIN = 30000;
+
   async getAccessToken(): Promise<string> {
-    if (this.accessToken && this.expiresAt && Date.now() < this.expiresAt) {
+    // refresh le token s'il ne reste que 30 secondes
+    if (this.accessToken && this.expiresAt && Date.now() < (this.expiresAt - this.SAFETY_MARGIN)) {
       return this.accessToken;
     }
 
-    return this.refreshToken();
+    if (this.refreshPromise) {
+      return this.refreshPromise;
+    }
+
+    this.refreshPromise = this.refreshToken();
+
+    try {
+      return await this.refreshPromise;
+    } finally {
+      this.refreshPromise = undefined;
+    }
   }
 
   private async refreshToken(): Promise<string> {
@@ -56,26 +70,6 @@ export class KeycloakService {
     return this.accessToken;
   }
 
-  async impersonate(userId: string) {
-    const params = new URLSearchParams();
-    params.append("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
-    params.append("client_id", configuration.keycloakClientId);
-    params.append("client_secret", configuration.keycloakClientSecret);
-    params.append("subject_token", await this.getAccessToken());
-    params.append("requested_subject", userId);
-    params.append("requested_token_type", "urn:ietf:params:oauth:token-type:access_token");
-
-    return await fetch(
-      `${configuration.keycloakURL}realms/${configuration.keycloakRealm}/protocol/openid-connect/token`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params
-      }
-    );
-  }
 }
 
 export const keycloakService = new KeycloakService();
