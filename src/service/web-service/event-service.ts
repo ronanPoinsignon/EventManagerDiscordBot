@@ -103,6 +103,11 @@ class EventService extends WebService {
     }
   }
 
+  async getMyEvents(userId: string): Promise<Event[]> {
+    const route = this.getRoute("/myEvents");
+    return this.get<Event[]>(route, userId, {});
+  }
+
 }
 
 export const eventService = new EventService();
