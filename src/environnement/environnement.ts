@@ -1,7 +1,9 @@
+import { envVariableUtils } from '../utils/env-variable-utils.js';
+
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:' + process.env.API_PORT,
-  frontEndUrl: 'http://localhost:' + process.env.FRONTEND_PORT,
-  keycloakURL: 'http://localhost:' + process.env.KEYCLOAK_PORT,
-  rabbitURL: 'localhost:' + process.env.RABBITMQ_PORT,
+  apiUrl: 'http://localhost:' + envVariableUtils.requireEnv('API_PORT'),
+  frontEndUrl: 'http://localhost:' + envVariableUtils.requireEnv('FRONTEND_PORT'),
+  keycloakURL: 'http://localhost:' + envVariableUtils.requireEnv('KEYCLOAK_PORT'),
+  rabbitURL: 'localhost:' + envVariableUtils.requireEnv('RABBITMQ_PORT'),
 };

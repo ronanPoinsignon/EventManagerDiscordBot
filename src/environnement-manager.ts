@@ -1,7 +1,8 @@
 import { environment as prodEnv} from "./environnement/environnement-prod.js";
 import { environment as localEnv } from './environnement/environnement.js';
+import { envVariableUtils } from './utils/env-variable-utils.js';
 
-const profile = process.env["PROFILE"];
+const profile = envVariableUtils.requireEnv("PROFILE");
 
 const envConfig = (() => {
     switch (profile) {
