@@ -10,6 +10,10 @@ class LoggerService {
     this.logMessage(console.debug, ...data);
   }
 
+  warn(...data: any[]) {
+    this.logMessage(console.warn, ...data);
+  }
+
   error(...data: any[]) {
     this.logMessage(console.error, ...data);
   }

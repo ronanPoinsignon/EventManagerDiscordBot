@@ -54,7 +54,7 @@ export const notify = async (client: Client, eventNotification: Notification<Eve
     const channelId = channelMap.channelId;
     const channel = client.guilds.cache.find(guild => guild.id == guildId)?.channels.cache.find(channel => channel.id == channelId);
     if(channel == null) {
-      loggerService.info(`Le channel ${channelId} n'existe plus.`);
+      loggerService.warn(`Le channel ${channelId} n'existe plus dans le serveur ${guildId}.`);
       return;
     }
 
