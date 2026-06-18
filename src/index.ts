@@ -9,6 +9,7 @@ import { embedUtils } from './utils/embed-utils.js';
 import { rabbitListenerService } from './service/rabbit/rabbit-listener-service.js';
 import { DiscordClientRabbitListener } from './service/rabbit/DiscordClientRabbitListener.js';
 import { loggerService } from './service/log-service.js';
+import { clearFiles } from './service/local-file-service.js';
 
 const client = new Client({ intents: [ GatewayIntentBits.Guilds ] });
 
@@ -53,3 +54,4 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 await client.login(configuration.token);
+clearFiles();
