@@ -8,7 +8,7 @@ import { eventService } from '../../service/web-service/event-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 
 @registerModal(MODALS.updateEventName.id)
-export class UpdateEventModalWorkflow extends ModalWorkflow {
+export class UpdateEventNameModalWorkflow extends ModalWorkflow {
 
   async run(interaction:  ModalSubmitInteraction): Promise<void> {
     const fields = interaction.fields;
