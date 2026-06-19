@@ -1,22 +1,44 @@
 import { Event } from '../../api/event.js';
-import { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import {
+  LabelBuilder, ModalBuilder, StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle
+} from 'discord.js';
 import { MODALS } from '../../modal-workflow/modal-workflow-id.js';
 import { dateUtils } from '../../utils/date-utils.js';
 
 export const showEventModal = async (event: Event | null) => {
   const modal = new ModalBuilder().setCustomId(MODALS.createEvent.id).setTitle('Nouvel événement');
 
-  const eventNameInput = new TextInputBuilder()
-    .setCustomId(MODALS.createEvent.eventNameId)
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder('Mon nouvel événement');
-  if(event?.eventName) {
-    eventNameInput.setValue(event.eventName);
+  let eventInput: LabelBuilder;
+
+  if(event == null) {
+    const eventNameInput = new TextInputBuilder()
+      .setCustomId(MODALS.createEvent.eventNameId)
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder('Mon nouvel événement');
+    eventInput = new LabelBuilder()
+      .setLabel("Nom de l'événement")
+      .setDescription("Ce nom doit être unique !")
+      .setTextInputComponent(eventNameInput);
+  } else {
+    const eventSelect = new StringSelectMenuBuilder()
+      .setCustomId(MODALS.createEvent.eventNameId)
+      .setPlaceholder('Mon événement')
+      .addOptions(new StringSelectMenuOptionBuilder()
+        .setLabel(event.eventName)
+        .setValue(event.eventName)
+        .setDefault(true));
+    const eventNameInput = new TextInputBuilder()
+      .setCustomId(MODALS.createEvent.eventNameId)
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder('Mon nouvel événement');
+    if(event?.eventName) {
+      eventNameInput.setValue(event.eventName);
+    }
+    eventInput = new LabelBuilder()
+      .setLabel("Nom de l'événement")
+      .setStringSelectMenuComponent(eventSelect);
   }
-  const eventNameLabel = new LabelBuilder()
-    .setLabel("Nom de l'événement")
-    .setDescription("Ce nom doit être unique !")
-    .setTextInputComponent(eventNameInput);
 
   const startDateInput = new TextInputBuilder()
     .setCustomId(MODALS.createEvent.startDateId)
@@ -25,7 +47,7 @@ export const showEventModal = async (event: Event | null) => {
     .setRequired(true);
   const startDate = dateUtils.toString(event?.startDate);
   if(startDate) {
-    startDateInput.setValue(startDate)
+    startDateInput.setValue(startDate);
   }
   const startDateInputLabel = new LabelBuilder()
     .setLabel("Date de début de l'événement")
@@ -50,7 +72,7 @@ export const showEventModal = async (event: Event | null) => {
     .setPlaceholder("78 rue constant forget, Nantes")
     .setRequired(false);
   if(event?.location) {
-    adresseInput.setValue(event.location)
+    adresseInput.setValue(event.location);
   }
   const adresseInputLabel = new LabelBuilder()
     .setLabel("Adresse de l'événement")
@@ -68,7 +90,7 @@ export const showEventModal = async (event: Event | null) => {
     .setLabel("URL du tricount")
     .setTextInputComponent(tricountInput);
 
-  modal.addLabelComponents(eventNameLabel, startDateInputLabel, endDateInputLabel, adresseInputLabel, tricountInputLabel);
+  modal.addLabelComponents(eventInput, startDateInputLabel, endDateInputLabel, adresseInputLabel, tricountInputLabel);
 
   return modal;
 }
