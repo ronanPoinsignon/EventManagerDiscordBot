@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import fs from 'node:fs';
+import { loggerService } from './log-service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -92,10 +93,10 @@ class LocalFileService {
 export const localFileService = new LocalFileService();
 
 const clearTempFiles = () => {
-  console.info("Cleaning temp files...");
+  loggerService.info("Cleaning temp files...");
   const tempFolder = localFileService.getFolderPath(TEMP_FOLDER);
   const deletedFiles = readFolder(tempFolder);
-  console.info(deletedFiles, "file(s) deleted.");
+  loggerService.info(deletedFiles, "file(s) deleted.");
 }
 
 const readFolder = (folderPath: string): number => {
