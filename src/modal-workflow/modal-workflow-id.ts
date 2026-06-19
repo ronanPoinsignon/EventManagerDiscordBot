@@ -46,10 +46,6 @@ export const MODALS = {
     todoId: "todoId",
     todoDone: "todoDoneId"
   },
-  selectEventUpdate: {
-    id: "selectEventUpdateModalId",
-    eventId: "eventId"
-  },
   uploadEventImage: {
     id: "uploadEventImageModalId",
     eventId: "eventId",
