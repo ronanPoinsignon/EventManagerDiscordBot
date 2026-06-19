@@ -4,7 +4,7 @@ import { envVariableUtils } from './utils/env-variable-utils.js';
 const rabbitUsername = envVariableUtils.requireEnv("RABBITMQ_USERNAME");
 const rabbitPassword = envVariableUtils.requireEnv("RABBITMQ_PASSWORD");
 
-export const configuration = {
+export const configuration = Object.freeze({
     apiURL: getEnvironnement().apiUrl,
     frontEndUrl: getEnvironnement().frontEndUrl,
     keycloakURL: getEnvironnement().keycloakURL,
@@ -14,4 +14,4 @@ export const configuration = {
     rabbitURL: `amqp://${rabbitUsername}:${rabbitPassword}@` + getEnvironnement().rabbitURL,
     token: envVariableUtils.requireEnv('TOKEN'),
     discordClientId: envVariableUtils.requireEnv("DISCORD_CLIENT_ID")
-}
+});
