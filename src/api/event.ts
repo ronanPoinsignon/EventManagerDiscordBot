@@ -14,7 +14,7 @@ export interface Event {
   participants: User[];
   todoList: Todo[];
   tricountUrl?: string;
-  guildIds: string[];
+  guildIds?: string[];
 
 }
 

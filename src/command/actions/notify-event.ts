@@ -10,7 +10,7 @@ import { Client } from 'discord.js';
 export const notify = async (client: Client, eventNotification: Notification<Event>)=> {
   const event = eventNotification.entity;
   const guilds = event.guildIds;
-  if(guilds.length == 0){
+  if(guilds == null || guilds.length == 0){
     return;
   }
 
