@@ -47,7 +47,10 @@ export class WebService {
                                specificHeaders : Record<string, any> = {}) {
     let token = await keycloakService.getAccessToken();
 
-    const query = new URLSearchParams(params || {}).toString();
+    const query = Object.entries(params)
+      .filter(([key, value]) => value != null)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&');
 
     const headers: { [key: string]: string } = {
       ...specificHeaders,
