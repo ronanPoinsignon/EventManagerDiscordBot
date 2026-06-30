@@ -6,13 +6,11 @@ import {
 } from 'discord.js';
 import { MODALS } from '../../modal-workflow/modal-workflow-id.js';
 import { eventService } from '../../service/web-service/event-service.js';
-import { eventUtils } from '../../utils/event-utils.js';
 import { userService } from '../../service/web-service/user-service.js';
 import { userUtils } from '../../utils/user-utils.js';
 
-export const showSetEventParticipant = async (userId: string) => {
-  const events = await eventService.findActive(userId)
-    .then(events => eventUtils.getAllEventFromEventArray(events));
+export const showSetEventParticipant = async (userId: string, eventId: string) => {
+  const event = await eventService.findById(eventId, userId);
   const users = await userService.getAllUsers(userId);
 
   const modal = new ModalBuilder().setCustomId(MODALS.addEventParticipant.id).setTitle("Ajouter des participants");
@@ -20,15 +18,15 @@ export const showSetEventParticipant = async (userId: string) => {
   const eventNameInput = new StringSelectMenuBuilder()
     .setCustomId(MODALS.addEventParticipant.eventId)
     .setPlaceholder('L\'événement à sélectionner')
-    .addOptions(events.map(evt => {
-      return new StringSelectMenuOptionBuilder()
-        .setLabel(evt.name)
-        .setValue(evt.value.id + "")
-    }));
+    .addOptions(new StringSelectMenuOptionBuilder()
+      .setLabel(event.eventName)
+      .setValue(event.id + "")
+      .setDefault(true));
   const eventNameLabel = new LabelBuilder()
     .setLabel("L'événement à modifier")
     .setStringSelectMenuComponent(eventNameInput);
 
+  const participantIds = event.participants.map(p => p.id);
   const userNameInput = new StringSelectMenuBuilder()
     .setCustomId(MODALS.addEventParticipant.participants)
     .setPlaceholder('Les participants à définir')
@@ -36,9 +34,10 @@ export const showSetEventParticipant = async (userId: string) => {
       return new StringSelectMenuOptionBuilder()
         .setLabel(userUtils.parseUserName(user))
         .setValue(user.id + "")
+        .setDefault(participantIds.indexOf(user.id) >= 0)
     }))
     .setMaxValues(users.length)
-    .setRequired(false);
+    .setRequired(true);
   const userNameLabel = new LabelBuilder()
     .setLabel("Les participants")
     .setStringSelectMenuComponent(userNameInput);

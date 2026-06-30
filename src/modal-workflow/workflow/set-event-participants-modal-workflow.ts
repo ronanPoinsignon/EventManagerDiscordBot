@@ -16,13 +16,22 @@ export class SetEventParticipantsModalWorkflow extends ModalWorkflow {
     const eventId: string | undefined = fields.getStringSelectValues(MODALS.addEventParticipant.eventId)[0];
     const participants = fields.getStringSelectValues(MODALS.addEventParticipant.participants);
 
+    const event = await eventService.findById(eventId, interaction.user.id);
+
     if(eventId == null) {
       throw new BotException('Le nom de l\'événement est obligatoire.');
     }
 
     const todoResult = await eventService.setEventParticipant(eventId, [...participants], interaction.user.id);
 
-    const embed = embedUtils.validationEmbed("Modification des participants", [], `Les participants ont bien été modifiés.`);
+    let message: string;
+
+    if(event.parentEvent == null) {
+      message = `Les participants ont bien été modifiés pour l'événement ${event.eventName}.`
+    } else {
+      message = `Les participants ont bien été modifiés pour le programme ${event.eventName}.`
+    }
+    const embed = embedUtils.validationEmbed("Modification des participants", [], message);
     await messageService.replyEmbed(interaction, { embed: [ embed.embed ], attachment: embed.attachments });
   }
 }
