@@ -9,7 +9,7 @@ import { eventService } from '../../service/web-service/event-service.js';
 import { eventUtils } from '../../utils/event-utils.js';
 import { UserException } from '../../exception/bot-exception.js';
 
-export const showRemoveSubEventModal = async (userId: string) => {
+export const showDeleteSubEventModal = async (userId: string) => {
   const events = await eventService.findActive(userId)
     .then(events => eventUtils.getAllEventFromEventArray(events))
     .then(events => events.filter(event => event.level > 0));
