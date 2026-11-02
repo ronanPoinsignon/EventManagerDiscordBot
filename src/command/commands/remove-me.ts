@@ -4,12 +4,13 @@ import { BotException } from '../../exception/bot-exception.js';
 import { eventService } from '../../service/web-service/event-service.js';
 import { embedUtils } from '../../utils/embed-utils.js';
 import { messageService } from '../../service/message-service.js';
+import { eventNames } from '../../handler/autocomplete-handler.js';
 
 export const command = new Command(
   new SlashCommandBuilder().setName('remove-me').setDescription('S\'enlever d\'un un événement ou d\'un programme.')
-    .addStringOption((option) => option.setName("event-program-name").setDescription("Le nom de l'événement ou du programme.").setAutocomplete(true).setRequired(true)),
+    .addStringOption((option) => option.setName(eventNames.eventProgramName).setDescription("Le nom de l'événement ou du programme.").setAutocomplete(true).setRequired(true)),
   async (interaction) => {
-    const eventId = interaction.options.getString("event-program-name");
+    const eventId = interaction.options.getString(eventNames.eventProgramName);
     if(eventId == null) {
       throw new BotException("Le nom de l'événement est obligatoire.");
     }

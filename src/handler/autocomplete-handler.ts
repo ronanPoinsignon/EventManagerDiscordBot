@@ -1,4 +1,4 @@
-import { AutocompleteInteraction } from 'discord.js';
+import { AutocompleteInteraction, Collection, GuildMember } from 'discord.js';
 import { eventService } from '../service/web-service/event-service.js';
 import { eventUtils } from '../utils/event-utils.js';
 import { AbstractInteractionHandler } from './abstract-interaction-handler.js';
@@ -9,7 +9,7 @@ class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInterac
 
     const focused = interaction.options.getFocused(true);
 
-    if("event-name" === focused.name) {
+    if(eventNames.eventName === focused.name) {
       const events = await eventService.findActive(interaction.user.id);
 
       await interaction.respond(
@@ -20,7 +20,7 @@ class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInterac
       );
     }
 
-    if("program-name" === focused.name) {
+    if(eventNames.programName === focused.name) {
       const events = await eventService.findActive(interaction.user.id);
       const results = eventUtils.getAllEventFromEventArray(events).filter(event => event.level > 0);
       await interaction.respond(
@@ -31,7 +31,7 @@ class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInterac
       );
     }
 
-    if("event-program-name" === focused.name) {
+    if(eventNames.eventProgramName === focused.name) {
       const events = await eventService.findActive(interaction.user.id);
       const results = eventUtils.getAllEventFromEventArray(events);
       await interaction.respond(
@@ -42,7 +42,7 @@ class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInterac
       );
     }
 
-    if("todo-name" === focused.name) {
+    if(eventNames.todoName === focused.name) {
       const events = await eventService.findActive(interaction.user.id);
       const results = eventUtils.getAllTodoFromEventArray(events);
       await interaction.respond(
@@ -57,3 +57,9 @@ class AutocompleteHandler extends AbstractInteractionHandler<AutocompleteInterac
 }
 
 export const autocompleteHandler = new AutocompleteHandler();
+export const eventNames = {
+  eventName: "event-name",
+  programName: "program-name",
+  eventProgramName: "event-program-name",
+  todoName: "todo-name"
+}
