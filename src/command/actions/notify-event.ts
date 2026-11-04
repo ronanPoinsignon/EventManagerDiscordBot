@@ -40,7 +40,8 @@ export const notify = async (client: Client, eventNotification: Notification<Eve
   }
 
   const textMentions = notifiedParticipants.map(user => `<@${user.discordId}>`).join(" ");
-  const textDateInformation = `L'événement ${event.eventName} est prévu pour le <t:${event.startDate.getTime()}:s>.`
+  // div par 1000 car discord attend le timestamp en secondes et non en millisecondes
+  const textDateInformation = `L'événement ${event.eventName} est prévu pour le <t:${event.startDate.getTime()/1000}:s>.`
 
   let message = textMentions + "\n" + textDateInformation;
   if(todoNotDone.length > 0) {
